@@ -1,0 +1,72 @@
+@import '../../../global.scss';
+
+.nav-bar {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+.brand-logo {
+  cursor: pointer;
+  color: rgba(209, 46, 38);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.nav-space {
+  flex-grow: 1;
+}
+
+[nz-menu] {
+  top: 0;
+  width: 100%;
+  background-color: rgba(11, 11, 11);
+}
+
+[nz-menu-item] {
+  font-weight: 500;
+  font-size: 16px;
+  width: fit-content;
+  border-bottom: none;
+  color: rgba(209, 46, 38) !important;
+
+  a,
+  a:hover {
+    color: rgba(209, 46, 38) !important;
+  }
+
+  @include respond-to(handhelds) {
+    font-size: 14px;
+  }
+}
+[nz-menu-item]:hover {
+  color: rgba(209, 46, 38, 0.8) !important;
+}
+
+.btn {
+  width: fit-content;
+}
+
+.sub-menu {
+  color: rgba(209, 46, 38);
+  @include respond-to(handhelds) {
+    padding-right: 8px;
+  }
+}
+.sub-menu:hover {
+  cursor: pointer;
+}
+.on-handset:hover {
+  background-color: rgba(11, 11, 11);
+}
+
+.menu-button {
+  border-radius: 4px;
+  width: 100%;
+  border: rgba(209, 46, 38);
+  background-color: rgba(209, 46, 38);
+}
+.menu-button:hover {
+  background-color: rgba(209, 46, 38);
+  border: rgba(209, 46, 38);
+}

@@ -1,0 +1,51 @@
+<footer>
+    <section>
+        <article>
+            <ul>
+                <li class="block"><a class="brand-logo" (click)="navigateTo()">Mini-Netflix</a></li>
+                <li class="inline"><a (click)="navigateTo('/movies')">All Movies</a></li>
+                <li class="inline"><a (click)="navigateTo('/movies/favourites')">My Favourites</a></li>
+                <li class="inline"><a (click)="navigateTo('/login')">Sign In</a></li>
+            </ul>
+        </article>
+        <article>
+            <ul>
+                <li class="block"><a href="https://andela.com/alc/" target="_blank">Andela Learning Community</a></li>
+                <li class="block"><a href="https://github.com/gdkimaiyo/netflix" target="_blank">
+                    View Source Code</a></li>
+            </ul>
+        </article>
+        <article>
+            <ul>
+                <li class="block"><a class="article-header">Developer</a></li>
+                <li class="inline"><a href="https://github.com/gdkimaiyo" target="_blank">
+                    <fa-icon class="social-icon" [icon]="['fab', 'github-square']"></fa-icon>Github</a>
+                </li>
+                <li class="inline"><a href="https://www.linkedin.com/in/gideon-kimaiyo/" target="_blank">
+                    <fa-icon class="social-icon" [icon]="['fab', 'linkedin']"></fa-icon>Linkedin</a>
+                </li>
+                <li class="inline"><a href="https://twitter.com/gideonGDK" target="_blank">
+                    <fa-icon class="social-icon" [icon]="['fab', 'twitter-square']"></fa-icon>Twitter</a>
+                </li>
+            </ul>
+        </article>
+        <article>
+            <ul>
+                <li class="block"><a href="https://www.themoviedb.org/" target="_blank">
+                    <img src="assets/images/tmdb.svg" height="50" alt="The Movie DB Logo">
+                </a></li>
+                <li class="block" style="padding-top: 12px;"><a href="https://www.themoviedb.org/" target="_blank">
+                    This app consumes the movie db api
+                </a></li>
+            </ul>
+        </article>
+    </section>
+    <nz-divider></nz-divider>
+    <div class="copyright">
+        &copy; {{ year }}
+        <fa-icon class="dot-circle" [icon]="['fas', 'circle']"></fa-icon>
+        Developed by
+        <fa-icon class="dot-circle" [icon]="['fas', 'circle']"></fa-icon>
+        <a href="https://www.linkedin.com/in/gideon-kimaiyo/" target="_blank">Gideon Kimaiyo</a>
+    </div>
+</footer>

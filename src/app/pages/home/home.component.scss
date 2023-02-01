@@ -1,0 +1,12 @@
+@import '../../../global.scss';
+
+.main-header {
+    margin-top: 7%;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    font-size: 54px;
+
+    @include respond-to(handhelds) {
+        font-size: 38px;
+    }
+}

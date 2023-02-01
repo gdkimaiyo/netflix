@@ -1,0 +1,20 @@
+/* You can add global styles to this file, and also import other style files */
+// Responsiveness
+$break-small: 575px;
+$break-large: 1024px;
+
+@mixin respond-to($media) {
+  @if $media == handhelds {
+    @media only screen and (max-width: $break-small) {
+      @content;
+    }
+  } @else if $media == medium-screens {
+    @media only screen and (min-width: ($break-small + 1)) and (max-width: ($break-large - 1)) {
+      @content;
+    }
+  } @else if $media == wide-screens {
+    @media only screen and (min-width: $break-large) {
+      @content;
+    }
+  }
+}

@@ -1,0 +1,95 @@
+@import '../../../global.scss';
+
+footer {
+  color: #ffffff;
+  margin: 0 auto;
+  width: 100%;
+  margin-top: 12px;
+}
+section {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+}
+article {
+  height: 100px;
+  width: 23.25%;
+  max-width: 23.25%;
+  margin: 12px 8px;
+  @include respond-to(handhelds) {
+    width: 100%;
+    max-width: 100%;
+    height: fit-content;
+    margin: 4px 8px;
+  }
+}
+@media only screen and (max-width: 575px){
+  article {
+    width: 100%;
+    max-width: 100%;
+    height: fit-content;
+  }
+}
+@media only screen and (max-width: 1024px) and (min-width: 576px) {
+  article {
+    width: 46%;
+    max-width: 46%;
+  }
+}
+ul {
+  list-style: none;
+  li a {
+    color: #ffffff;
+  }
+  @include respond-to(handhelds) {
+    margin-left: 0;
+    padding-left: 8px;
+    .inline {
+      display: inline-block;
+      padding-right: 12px;
+    }
+    .block {
+      display: block;
+    }
+  }
+}
+.brand-logo {
+  cursor: pointer;
+  color: rgba(209, 46, 38) !important;
+  font-size: 24px;
+  font-weight: 700;
+}
+.article-header {
+  pointer-events: none;
+  color: rgba(209, 46, 38) !important;
+  font-size: 18px;
+  font-weight: 700;
+}
+footer ::ng-deep .ant-divider {
+  border-top: 1px solid rgb(255, 255, 255, 0.6);
+  margin: 4px 0;
+}
+.copyright {
+  text-align: center;
+  padding: 8px;
+  margin: 8px 0;
+  a {
+    color: #ffffff;
+  }
+}
+.dot-circle {
+  font-size: x-small;
+  padding: 0 12px;
+  @include respond-to(handhelds) {
+    font-size: xx-small;
+    padding: 0 8px;
+  }
+}
+.social-icon {
+  padding-right: 12px;
+  @include respond-to(handhelds) {
+    padding-right: 8px;
+  }
+}

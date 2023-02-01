@@ -1,0 +1,55 @@
+<div class="nav-bar">
+    <div class="brand-logo" (click)="navigateTo()">
+        Mini-Netflix
+    </div>
+    <div class="nav-space"></div>
+    <div *ngIf="isHandset$ | async; else normalMenu" nz-dropdown [nzDropdownMenu]="mobileMenu" nzTrigger="click"
+        class="sub-menu">
+        <fa-icon [icon]="['fas', 'bars']"></fa-icon>
+    </div>
+</div>
+
+<nz-dropdown-menu #mobileMenu="nzDropdownMenu">
+    <ul nz-menu nzMode="vertical">
+        <li nz-menu-item class="on-handset" (click)="navigateTo('/movies')">
+            TV Movies
+        </li>
+        <li nz-menu-item class="on-handset" (click)="navigateTo('/shows')">
+            TV Shows
+        </li>
+        <li nz-menu-item class="on-handset" (click)="navigateTo('/movies/favourites')">
+            Favourites
+        </li>
+        <li nz-menu-item class="on-handset" (click)="login()">
+            <button nz-button nzDanger nzType="primary" class="menu-button">
+                Sign In
+            </button>
+        </li>
+    </ul>
+</nz-dropdown-menu>
+
+<ng-template #normalMenu>
+    <div>
+        <ul nz-menu nzMode="horizontal" style="border-bottom: none;">
+            <li nz-menu-item (click)="navigateTo('/movies')"
+                style="border-bottom: none; margin-left: 8px ; margin-right: 8px ;">
+                TV Movies
+            </li>
+            <li nz-menu-item (click)="navigateTo('/shows')"
+                style="border-bottom: none; margin-left: 8px ; margin-right: 8px ;">
+                TV Shows
+            </li>
+            <li nz-menu-item (click)="navigateTo('/movies/favourites')"
+                style="border-bottom: none; margin-left: 8px ; margin-right: 8px ;">
+                Favourites
+            </li>
+            <li nz-menu-item (click)="login()"
+                style="border-bottom: none; margin-left: 16px ; margin-right: 8px ;">
+                <button nz-button nzDanger nzType="primary" class="menu-button">
+                    Sign In
+                </button>
+            </li>
+        </ul>
+    </div>
+</ng-template>
+

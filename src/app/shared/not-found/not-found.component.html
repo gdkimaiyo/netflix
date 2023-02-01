@@ -1,0 +1,14 @@
+<main>
+    <section>
+        <article>
+            <fa-icon class="not-found-icon" [icon]="['fas', 'frown']"></fa-icon>
+            <h2 nz-typography class="not-found-header">Page not found!</h2>
+            <button (click)="goBack()" nz-button nzDanger nzType="default" [nzSize]="size" class="goback-button">
+                <fa-icon class="btn-icon" [icon]="['fas', 'long-arrow-alt-left']"></fa-icon> Go Back
+            </button>
+            <button (click)="navigateTo()" nz-button nzDanger nzType="primary" [nzSize]="size" class="home-button">
+                <fa-icon class="btn-icon" [icon]="['fas', 'home']"></fa-icon> Home
+            </button>
+        </article>
+    </section>
+</main>
