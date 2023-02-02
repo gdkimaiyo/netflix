@@ -1,0 +1,88 @@
+<ng-template #pointer>
+    <fa-icon class="pointer" [icon]="['fas', 'angle-double-up']"></fa-icon>
+</ng-template>
+<main class="main-page" *ngIf="isLoading">
+    <section style="margin-top: 15vh">
+        <div style="color: #ffffff; text-align: center; font-size: 18px;">
+            <nz-spin [nzSpinning]="isLoading" nzSimple style="display: inline;"></nz-spin>
+            Loading...
+        </div>
+    </section>
+</main>
+<main class="main-page" *ngIf="!isLoading && !idIsInvalid; else invalidId">
+    <nz-back-top [nzTemplate]="pointer"></nz-back-top>
+    <nz-spin [nzSpinning]="isLoading" [nzSize]="'large'" *ngIf="showBackdrop">
+        <section class="backdrop-image" style="background-image: url('{{backdropURL}}');">
+            <div class="toggler-div">
+                <a (click)="showMovieBackdrop()" nz-button nzDanger nzType="primary" [nzSize]="size"
+                    class="toggle-backdrop">
+                    Hide Backdrop
+                </a>
+            </div>
+        </section>
+    </nz-spin>
+    <section class="section" *ngIf="!showBackdrop && selectedMovie">
+        <article class="movie-details">
+            <p style="margin-left: 8px;">
+                <a (click)="goBack()" style="color: rgba(209, 46, 38);">
+                    <fa-icon style="padding-right: 8px;" [icon]="['fas', 'long-arrow-alt-left']"></fa-icon> Go Back
+                </a>
+            </p>
+            <h1 nz-typography class="movie-title">{{selectedMovie?.title}}</h1>
+            <div *ngIf="isLoading; else contentsLoaded" class="spinner">
+                <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+            </div>
+            <ng-template #contentsLoaded>
+                <app-movie-summary [selectedMovie]="selectedMovie" [moreDetails]="moreDetails">
+                </app-movie-summary>
+            </ng-template>
+        </article>
+        <article class="movie-image">
+            <h1 id="onHandset" nz-typography class="movie-title">{{selectedMovie?.title}}</h1>
+            <nz-card [nzCover]="coverTemplate">
+                <nz-card-meta>
+                </nz-card-meta>
+            </nz-card>
+            <ng-template #coverTemplate>
+                <nz-spin [nzSpinning]="isLoading">
+                    <img alt="Movie image" src="{{imageURL}}" />
+                </nz-spin>
+            </ng-template>
+            <p class="movie-tagline"><em>{{selectedMovie?.tagline}}</em></p>
+            <p style="margin-left: 8px; text-align: left;" id="onHandset">
+                <a (click)="goBack()" style="color: rgba(209, 46, 38);">
+                    <fa-icon style="padding-right: 8px;" [icon]="['fas', 'long-arrow-alt-left']"></fa-icon> Go Back
+                </a>
+            </p>
+            <p id="onDesktop" *ngIf="backdropAvailable">
+                <a (click)="showMovieBackdrop()" nz-button nzDanger nzType="text" [nzSize]="size"
+                    class="toggle-backdrop-button">
+                    Show Backdrop
+                </a>
+            </p>
+            <div id="onHandset">
+                <div *ngIf="isLoading; else contentsLoaded" style="text-align: center;">
+                    <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+                </div>
+                <ng-template #contentsLoaded>
+                    <app-movie-summary [selectedMovie]="selectedMovie" [moreDetails]="moreDetails">
+                    </app-movie-summary>
+                </ng-template>
+            </div>
+        </article>
+    </section>
+    <div class="section-divider"></div>
+</main>
+
+<ng-template #invalidId>
+    <main class="movie-not-found">
+        <section>
+            <article>
+                <h2 nz-typography class="not-found-header">Movie not found!</h2>
+                <button (click)="goBack()" nz-button nzDanger nzType="default" [nzSize]="size" class="goback-button">
+                    <fa-icon class="btn-icon" [icon]="['fas', 'long-arrow-alt-left']"></fa-icon> Go Back
+                </button>
+            </article>
+        </section>
+    </main>
+</ng-template>

@@ -1,12 +1,231 @@
 @import '../../../global.scss';
 
-.main-header {
-    margin-top: 7%;
-    text-align: center;
-    color: rgb(255, 255, 255);
-    font-size: 54px;
+main {
+  margin-top: 7%;
+}
 
+.section {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 1024px;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 3%;
+
+  @include respond-to(handhelds) {
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 10%;
+  }
+}
+.landing-info {
+  width: 60%;
+  max-width: 60%;
+  padding: 24px 16px;
+  margin-right: 24px;
+  align-content: center;
+  flex-grow: 1;
+  @include respond-to(handhelds) {
+    width: 100%;
+    max-width: 100%;
+    padding: 16px;
+    padding-bottom: 4px;
+    margin: 0;
+  }
+}
+
+.random-movie {
+  width: 40%;
+  max-width: 40%;
+  margin-top: 24px;
+  padding: 24px 16px;
+  align-content: center;
+  flex-grow: 1;
+
+  nz-card {
+    width: 100%;
+    text-align: left;
+    border: none;
+    box-shadow: 0 3px 5px -1px #0003, 0 6px 10px #00000024, 0 1px 18px #0000001f;
+  }
+  // ng-deep css within movie-card for css properties to be within this page ONLY
+  ::ng-deep .ant-card-body {
+    margin: 0;
+    padding: 0;
+    background-color: rgba(11, 11, 11);
+  }
+  ::ng-deep .ant-card-actions {
+    border: none;
+    background-color: rgba(11, 11, 11);
+  }
+  ::ng-deep .ant-card-actions>li {
+    color: rgba(209, 46, 38);
+  }
+  ::ng-deep .ant-card-actions>li span {
+    font-size: 18px;
+  }
+  ::ng-deep .ant-card-actions>li>span:hover,
+  ::ng-deep .ant-card-actions>li>span:first-child:hover {
+    color: rgba(209, 46, 38, 0.8);
+  }
+  ::ng-deep .ant-card-actions>li>span {
+    width: 100%;
+    padding-left: 12px;
+    padding-right: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  ::ng-deep .ant-progress {
+    margin-right: 8px;
+    margin-bottom: 4px;
+    background-color: #000000;
+    padding: 4px;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+  }
+  ::ng-deep .ant-progress:hover {
+    font-weight: bold;
+  }
+  ::ng-deep .ant-progress-circle .ant-progress-text,
+  ::ng-deep .ant-progress-circle.ant-progress-status-success .ant-progress-text {
+    color: #ffffff;
+  }
+
+  img {
+    width: 100%;
+    height: 350px;
+  }
+
+  @include respond-to(handhelds) {
+    width: 100%;
+    max-width: 100%;
+    padding: 16px;
+    padding-top: 4px;
+    margin: 0;
+  }
+}
+.movie-title {
+  font-size: 18px;
+}
+.movie-title:hover {
+  color: rgba(209, 46, 38, 0.8);
+}
+
+.user-score {
+  bottom: 35px;
+  right: 24px;
+  position: absolute;
+  @include respond-to(handhelds) {
+    right: 4px;
+    bottom: 40px;
+  }
+}
+
+::ng-deep .ant-spin-dot-item {
+  background-color: red;
+}
+.like-gif {
+  width: 20%;
+  max-width: 20%;
+  margin-top: 3%;
+  padding: 24px 16px;
+  align-content: center;
+  text-align: center;
+  flex-grow: 1;
+  
+  .heart-icon {
+    color: rgba(209, 46, 38);
+    font-size: 112px;
     @include respond-to(handhelds) {
-        font-size: 38px;
+      font-size: 72px;
     }
+  }
+  @include respond-to(handhelds) {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin-top: 5%;
+  }
+}
+.favourites-info {
+  width: 80%;
+  max-width: 80%;
+  padding: 24px 16px;
+  margin-top: 38px;
+  margin-left: 24px;
+  align-content: center;
+  flex-grow: 1;
+  @include respond-to(handhelds) {
+    width: 100%;
+    max-width: 100%;
+    padding: 16px;
+    margin: 0;
+  }
+}
+.main-header {
+  color: rgb(255, 255, 255);
+  font-size: 62px;
+  @include respond-to(handhelds) {
+    font-size: 38px;
+  }
+}
+.sub-header {
+  color: rgb(255, 255, 255, 0.8);
+  font-size: 1.625rem;
+  @include respond-to(handhelds) {
+    font-size: 24px;
+  }
+}
+.second-header {
+  color: rgb(255, 255, 255);
+  font-size: 48px;
+  @include respond-to(handhelds) {
+    font-size: 32px;
+  }
+}
+.sub-second-header {
+  color: rgb(255, 255, 255, 0.8);
+  font-size: 1.525rem;
+  @include respond-to(handhelds) {
+    font-size: 18px;
+  }
+}
+::ng-deep .ant-divider {
+  border-top: 1px solid rgb(255, 255, 255, 0.6);
+}
+.section-divider {
+  width: 100%;
+  max-width: 100%;
+  border-bottom: 8px solid rgb(34, 34, 34,);
+}
+.browse-button {
+  border-radius: 8px;
+  border: rgba(209, 46, 38);
+  background-color: rgba(209, 46, 38);
+  @include respond-to(handhelds) {
+    text-align: center !important;
+  }
+}
+.browse-button:hover {
+  background-color: rgba(209, 46, 38);
+  border: rgba(209, 46, 38);
+}
+
+#onDesktop {
+  display: block;
+  @include respond-to(handhelds) {
+    display: none;
+  }
+}
+
+#onHandset {
+  display: none;
+  @include respond-to(handhelds) {
+    display: block;
+  }
 }

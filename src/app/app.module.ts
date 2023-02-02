@@ -12,13 +12,19 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './pages/home/home.component';
+import { FaqsComponent } from './components/faqs/faqs.component';
+import { MovieDetailsComponent } from './components/movie-details/movie-details.component';
+import { MovieSummaryComponent } from './components/movie-summary/movie-summary.component';
 
 registerLocaleData(en);
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    FaqsComponent,
+    MovieDetailsComponent,
+    MovieSummaryComponent
   ],
   imports: [
     BrowserModule,
