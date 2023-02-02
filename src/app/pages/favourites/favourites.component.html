@@ -1,0 +1,58 @@
+<ng-template #pointer>
+    <fa-icon class="pointer" [icon]="['fas', 'angle-double-up']"></fa-icon>
+</ng-template>
+
+<main class="main-page">
+    <nz-back-top [nzTemplate]="pointer"></nz-back-top>
+    <section class="section" *ngIf="favourites?.length > 0; else emptyList">
+        <p class="go-back-btn">
+            <a (click)="goBack()" style="color: rgba(209, 46, 38);">
+                <fa-icon style="padding-right: 8px;" [icon]="['fas', 'long-arrow-alt-left']"></fa-icon> Go Back
+            </a>
+        </p>
+        <h1 nz-typography class="page-title">My Favourites</h1>
+        <article class="favourite">
+            <div [ngClass]="loading ? '' : 'movie-card'" *ngFor="let favourite of movies"
+                style="width: 100%; margin-right: 12px;">
+                <nz-card [nzLoading]="loading">
+                    <nz-card-meta [nzAvatar]="imageTemplate" [nzTitle]="cardTitle" [nzDescription]="descTemplate">
+                    </nz-card-meta>
+                </nz-card>
+                <ng-template #cardTitle>
+                    <span id="{{favourite?.id}}" (click)="showMovieDetails($event)">{{favourite?.title}}</span>
+                </ng-template>
+                <ng-template #imageTemplate>
+                    <img id="{{favourite?.id}}" src="{{favourite.imageURL}}" alt="Favourite Movie Image"
+                        (click)="showMovieDetails($event)">
+                </ng-template>
+                <ng-template #descTemplate>
+                    <p class="release-date">{{favourite?.release_date}}</p>
+                    <p class="overview">{{favourite?.overview}}</p>
+                    <p class="action-btns">
+                        <a class="remove-btn" nz-button nzType="link" nz-popconfirm
+                            nzOkText="Yes" nzPopconfirmTitle="Are you sure you want to remove from favourites?"
+                            nzPopconfirmPlacement="top" (nzOnConfirm)="removeMovie(favourite?.id)">
+                            <fa-icon style="margin-right: 6px;" [icon]="['fas', 'times']"></fa-icon>
+                            Remove
+                        </a>
+                    </p>
+                </ng-template>
+            </div>
+            <div class="pagination">
+                <nz-pagination [nzPageIndex]="page" [nzTotal]="totalMovies" (nzPageIndexChange)="changePage($event)"></nz-pagination>
+            </div>
+        </article>
+    </section>
+
+    <ng-template #emptyList>
+        <section class="section">
+            <p class="go-back-btn">
+                <a (click)="goBack()" style="color: rgba(209, 46, 38);">
+                    <fa-icon style="padding-right: 8px;" [icon]="['fas', 'long-arrow-alt-left']"></fa-icon> Go Back
+                </a>
+            </p>
+            <h1 nz-typography class="page-title">My Favourites</h1>
+            <p>Your favourites list is empty.</p>
+        </section>
+    </ng-template>
+</main>

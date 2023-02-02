@@ -1,0 +1,152 @@
+@import '../../../global.scss';
+
+.main-page {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 3%;
+  margin-top: 3%;
+  color: rgb(255, 255, 255);
+  @include respond-to(handhelds) {
+    margin-bottom: 10%;
+    margin-top: 5%;
+  }
+}
+
+.spinner {
+  margin-top: 72px;
+  margin-left: 72px;
+  @include respond-to(handhelds) {
+    text-align: center;
+    margin-top: 0;
+    margin-left: 0;
+  }
+}
+
+.section {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 960px;
+  @include respond-to(handhelds) {
+    padding-left: 16px;
+    width: 100%;
+    max-width: 100%;
+  }
+  @include respond-to(medium-screens) {
+    padding-left: 16px;
+  }
+}
+
+.go-back-btn {
+  margin-left: 8px;
+  @include respond-to(handhelds) {
+    margin-left: 0;
+  }
+}
+
+.page-title {
+  color: rgb(255, 255, 255);
+  font-size: 48px;
+  @include respond-to(handhelds) {
+    font-size: 32px;
+    padding-bottom: 12px;
+  }
+}
+
+.favourite {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+}
+
+.movie-card {
+  margin: 8px 0;
+  img {
+    width: 124px;
+    height: 193px;
+    cursor: pointer;
+  }
+
+  ::ng-deep .ant-card-body,
+  ::ng-deep .ant-card-meta {
+    padding: 0;
+    margin: 0;
+  }
+
+  ::ng-deep .ant-card-meta-avatar {
+    padding-left: 0;
+    padding-bottom: 0;
+    margin-left: 0;
+    margin-bottom: 0;
+  }
+
+  ::ng-deep .ant-card-meta-detail {
+    padding-top: 16px;
+  }
+
+  ::ng-deep .ant-card-meta-title {
+    font-size: 18px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    cursor: pointer;
+  }
+
+  .release-date {
+    color: rgba(0, 0, 0, 0.5);
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  ::ng-deep .ant-card-meta-description .overview {
+    font-size: 14px;
+    padding-right: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .action-btns {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .remove-btn {
+    color: #d12e26;
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  @include respond-to(handhelds) {
+    img {
+      width: 120px;
+      height: 185px;
+    }
+  }
+}
+
+.pagination {
+  margin-top: 12px;
+  ::ng-deep .ant-pagination-item:hover {
+    border-color: rgba(209, 46, 38);
+  }
+  .prev-next-btns {
+    color: rgba(209, 46, 38);
+  }
+
+  ::ng-deep .ant-pagination-item-active,
+  ::ng-deep .ant-pagination-item-active a,
+  ::ng-deep .ant-pagination-item-active a:hover,
+  ::ng-deep .ant-pagination-item a:hover {
+    color: rgba(209, 46, 38);
+    border-color: rgba(209, 46, 38);
+  }
+
+  @include respond-to(handhelds) {
+    ::ng-deep .ant-pagination-item a {
+      color: rgba(209, 46, 38);
+    }
+  }
+}
