@@ -1,0 +1,84 @@
+<ng-template #pointer>
+    <fa-icon class="pointer" [icon]="['fas', 'angle-double-up']"></fa-icon>
+</ng-template>
+<main>
+    <nz-back-top [nzTemplate]="pointer"></nz-back-top>
+    <section class="search-section">
+        <h1 nz-typography class="page-title">TV Shows</h1>
+        <form nz-form [formGroup]="form" class="form" (ngSubmit)="startSearch()">
+            <nz-form-item>
+                <nz-form-control>
+                    <nz-input-group [nzSuffix]="searchButton">
+                        <input type="text" class="search-input" nz-input formControlName="searchTerm"
+                            placeholder="Search show by title" />
+                    </nz-input-group>
+                    <ng-template #searchButton>
+                        <fa-icon [icon]="['fas', 'search']"></fa-icon>
+                      </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </section>
+
+    <section class="section" *ngIf="shows?.length > 0">
+        <article>
+            <div class="show-card" *ngFor="let show of shows">
+                <nz-card nzHoverable [nzCover]="coverTemplate" [nzActions]="[showDetails]">
+                    <nz-card-meta [nzDescription]="showDesc">
+                    </nz-card-meta>
+                </nz-card>
+                <ng-template #showDesc>
+                    <div id="{{show?.id}}" class="show-title" *ngIf="!isLoading" (click)="showTvDetails($event)">
+                        {{show?.name}}</div>
+                    <div class="user-score" *ngIf="!isLoading">
+                        <nz-progress nzType="circle" [nzPercent]="show.vote_average" [nzWidth]="38" [nzStrokeWidth]="7"
+                            [nzFormat]="progressFormart"
+                            [nzStrokeColor]="(show.vote_average<=64)? { '50%': '#f3f705'}:{ '100%': '#63cd82' }">
+                        </nz-progress>
+                    </div>
+                    <nz-spin [nzSpinning]="isLoading" style="text-align: center;" nzSimple></nz-spin>
+                </ng-template>
+                <ng-template #coverTemplate>
+                    <!-- <span style="color: #ffffff; text-align: center;">Loading ...</span> -->
+                    <nz-spin [nzSpinning]="isLoading">
+                        <img id="{{show?.id}}" alt="{{show?.name}}" src="{{show.poster_path}}"
+                            (click)="showTvDetails($event)" />
+                    </nz-spin>
+                </ng-template>
+                <ng-template #showDetails>
+                    <span id="{{show?.id}}" class="card-action" *ngIf="!isLoading"
+                        (click)="showTvDetails($event)">{{
+                        show?.first_air_date }}</span>
+                </ng-template>
+            </div>
+        </article>
+    </section>
+
+    <section class="section" *ngIf="shows?.length > 0 && !searchTitle">
+        <!-- Pagination -->
+        <article class="page-nav" *ngIf="!isLoading">
+            <nz-pagination [nzPageIndex]="page" [nzResponsive]="true" [nzTotal]="5000"
+                [nzItemRender]="renderItemTemplate" (nzPageIndexChange)="changePage($event)"></nz-pagination>
+            <ng-template #renderItemTemplate let-type let-page="page">
+                <ng-container [ngSwitch]="type">
+                    <a *ngSwitchCase="'page'">{{ page }}</a>
+                    <a *ngSwitchCase="'prev'" class="prev-next-btns">Previous</a>
+                    <a *ngSwitchCase="'next'" class="prev-next-btns">Next</a>
+                    <a *ngSwitchCase="'prev_5'" class="prev-next-btns"><< </a>
+                    <a *ngSwitchCase="'next_5'" class="prev-next-btns">>></a>
+                </ng-container>
+            </ng-template>
+        </article>
+    </section>
+
+    <section *ngIf="isLoading">
+        <div style="color: #ffffff; text-align: center;">
+            <nz-spin [nzSpinning]="isLoading" nzSimple style="display: inline;"></nz-spin>
+            Loading tv shows ...
+        </div>
+    </section>
+
+    <section *ngIf="shows?.length == 0 && !isLoading">
+        <div style="color: #ffffff; text-align: center;">Show(s) not found!</div>
+    </section>
+</main>
