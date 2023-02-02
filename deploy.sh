@@ -9,7 +9,7 @@ set -e
 git rebase develop
 
 # build
-ng build --prod --output-path docs --base-href /mini-netflix/
+ng build --configuration production --output-path docs --base-href /netflix/
 
 # navigate into the build output directory
 cd docs
