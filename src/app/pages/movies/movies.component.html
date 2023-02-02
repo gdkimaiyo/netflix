@@ -1,0 +1,94 @@
+<ng-template #pointer>
+    <fa-icon class="pointer" [icon]="['fas', 'angle-double-up']"></fa-icon>
+</ng-template>
+<main>
+    <nz-back-top [nzTemplate]="pointer"></nz-back-top>
+    <section class="search-section">
+        <h1 nz-typography class="page-title">TV Movies</h1>
+        <form nz-form [formGroup]="form" class="form" (ngSubmit)="startSearch()">
+            <nz-form-item>
+                <nz-form-control>
+                    <nz-input-group [nzSuffix]="searchButton">
+                        <input type="text" autocomplete="on" class="search-input" nz-input
+                            formControlName="searchTerm" placeholder="Search movie by title" />
+                    </nz-input-group>
+                    <ng-template #searchButton>
+                        <fa-icon *ngIf="!inProgress" [icon]="['fas', 'search']" (click)="startSearch()" 
+                            style="cursor: pointer"></fa-icon>
+                        <nz-spin [nzSpinning]="inProgress" nzSimple style="display: inline;"></nz-spin>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+        <p *ngIf="searchTitle" style="color: #ffffff;">
+            <span *ngIf="inProgress; else searchComplete">
+                <span>Searching for: {{searchTitle}}</span>
+            </span>
+            <ng-template #searchComplete>
+                Results for: {{searchTitle}}
+            </ng-template>
+        </p>
+    </section>
+
+    <section class="section" *ngIf="movies?.length > 0">
+        <article>
+            <div class="movie-card" *ngFor="let movie of movies">
+                <nz-card nzHoverable [nzCover]="coverTemplate" [nzActions]="[movieDetails]">
+                    <nz-card-meta [nzDescription]="movieDesc">
+                    </nz-card-meta>
+                </nz-card>
+                <ng-template #movieDesc>
+                    <div id="{{movie?.id}}" class="movie-title" *ngIf="!isLoading" (click)="showMovieDetails($event)">
+                        {{movie?.title}}</div>
+                    <div class="user-score" *ngIf="!isLoading">
+                        <nz-progress nzType="circle" [nzPercent]="movie.vote_average" [nzWidth]="38" [nzStrokeWidth]="7"
+                            [nzFormat]="progressFormart"
+                            [nzStrokeColor]="(movie.vote_average<=64)? { '50%': '#f3f705'}:{ '100%': '#63cd82' }">
+                        </nz-progress>
+                    </div>
+                    <nz-spin [nzSpinning]="isLoading" style="text-align: center;" nzSimple></nz-spin>
+                </ng-template>
+                <ng-template #coverTemplate>
+                    <!-- <span style="color: #ffffff; text-align: center;">Loading ...</span> -->
+                    <nz-spin [nzSpinning]="isLoading">
+                        <img id="{{movie?.id}}" alt="{{movie?.title}}" src="{{movie.poster_path}}"
+                            (click)="showMovieDetails($event)" />
+                    </nz-spin>
+                </ng-template>
+                <ng-template #movieDetails>
+                    <span id="{{movie?.id}}" class="card-action" *ngIf="!isLoading"
+                        (click)="showMovieDetails($event)">{{
+                        movie?.release_date }}</span>
+                </ng-template>
+            </div>
+        </article>
+    </section>
+
+    <section class="section" *ngIf="movies?.length > 0 && !searchTitle">
+        <!-- Pagination -->
+        <article class="page-nav" *ngIf="!isLoading">
+            <nz-pagination [nzPageIndex]="page" [nzResponsive]="true" [nzTotal]="5000"
+                [nzItemRender]="renderItemTemplate" (nzPageIndexChange)="changePage($event)"></nz-pagination>
+            <ng-template #renderItemTemplate let-type let-page="page">
+                <ng-container [ngSwitch]="type">
+                    <a *ngSwitchCase="'page'">{{ page }}</a>
+                    <a *ngSwitchCase="'prev'" class="prev-next-btns">Previous</a>
+                    <a *ngSwitchCase="'next'" class="prev-next-btns">Next</a>
+                    <a *ngSwitchCase="'prev_5'" class="prev-next-btns"><< </a>
+                    <a *ngSwitchCase="'next_5'" class="prev-next-btns">>></a>
+                </ng-container>
+            </ng-template>
+        </article>
+    </section>
+
+    <section *ngIf="isLoading">
+        <div style="color: #ffffff; text-align: center;">
+            <nz-spin [nzSpinning]="isLoading" nzSimple style="display: inline;"></nz-spin>
+            Loading movies ...
+        </div>
+    </section>
+
+    <section *ngIf="movies?.length == 0 && !isLoading">
+        <div style="color: #ffffff; text-align: center;">Movie(s) not found!</div>
+    </section>
+</main>
