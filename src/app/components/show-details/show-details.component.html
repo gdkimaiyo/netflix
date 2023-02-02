@@ -1,0 +1,217 @@
+<ng-template #pointer>
+    <fa-icon class="pointer" [icon]="['fas', 'angle-double-up']"></fa-icon>
+</ng-template>
+<main class="main-page" *ngIf="isLoading">
+    <section style="margin-top: 15vh">
+        <div style="color: #ffffff; text-align: center; font-size: 18px;">
+            <nz-spin [nzSpinning]="isLoading" nzSimple style="display: inline;"></nz-spin>
+            Loading...
+        </div>
+    </section>
+</main>
+<main class="main-page" *ngIf="!isLoading && !idIsInvalid; else invalidId">
+    <nz-back-top [nzTemplate]="pointer"></nz-back-top>
+    <nz-spin [nzSpinning]="isLoading" [nzSize]="'large'" *ngIf="displayBackdrop">
+        <section class="backdrop-image" style="background-image: url('{{backdropURL}}');">
+            <div class="toggler-div">
+                <a (click)="showBackdrop()" nz-button nzDanger nzType="primary" [nzSize]="size" class="toggle-backdrop">
+                    Hide Backdrop
+                </a>
+            </div>
+        </section>
+    </nz-spin>
+    <section class="go-back-section">
+        <p>
+            <a (click)="goBack()" style="color: rgba(209, 46, 38);">
+                <fa-icon style="padding-right: 8px;" [icon]="['fas', 'long-arrow-alt-left']"></fa-icon> Go Back
+            </a>
+        </p>
+    </section>
+    <section class="section" *ngIf="!displayBackdrop && selectedShow">
+        <article class="show-image">
+            <h1 id="onHandset" nz-typography class="show-title">{{selectedShow?.name}}</h1>
+            <nz-card [nzCover]="coverTemplate">
+                <nz-card-meta>
+                </nz-card-meta>
+            </nz-card>
+            <ng-template #coverTemplate>
+                <nz-spin [nzSpinning]="isLoading">
+                    <img alt="Show image" src="{{imageURL}}" />
+                </nz-spin>
+            </ng-template>
+            <p class="show-tagline"><em>{{selectedShow?.tagline}}</em></p>
+            <p id="onDesktop" *ngIf="backdropAvailable">
+                <a (click)="showBackdrop()" nz-button nzDanger nzType="text" [nzSize]="size"
+                    class="toggle-backdrop-button">
+                    Show Backdrop
+                </a>
+            </p>
+            <div id="onHandset" class="show-summary">
+                <p>
+                    <span class="text-muted">Rated</span>
+                    <span *ngIf="selectedShow?.adult; else forAll">
+                        <nz-avatar [nzShape]="'square'" nzText="PG" style="background-color:#87d068;"></nz-avatar>
+                    </span>
+                    <ng-template #forAll>
+                        <nz-avatar [nzShape]="'square'" nzText="N/A" style="background-color:#87d068;"></nz-avatar>
+                    </ng-template>
+                    <fa-icon class="dot-icon" [icon]="['fas', 'circle']"></fa-icon>
+
+                    <span *ngIf="selectedShow?.first_air_date">
+                        <span class="text-muted">First Air Date</span>
+                        {{ selectedShow?.first_air_date }}
+                        <fa-icon class="dot-icon" [icon]="['fas', 'circle']"></fa-icon>
+                    </span>
+
+                    <span *ngIf="selectedShow?.genres?.length > 0">
+                        <span class="text-muted">Genre</span>
+                        <span *ngFor="let genre of selectedShow?.genres; index as i">
+                            {{ genre?.name }}<span *ngIf="i !== selectedShow?.genres?.length - 1">,</span>
+                        </span>
+                        <fa-icon class="dot-icon" [icon]="['fas', 'circle']"></fa-icon>
+                    </span>
+
+                    <span>
+                        <span class="text-muted">Runtime</span>
+                        {{ selectedShow?.runtime }}
+                    </span>
+                </p>
+
+                <div class="flex-container">
+                    <div class="user-score" *ngIf="selectedShow?.vote_average !== 0">
+                        <nz-progress nzType="circle" [nzPercent]="selectedShow?.vote_average" [nzWidth]="52" [nzStrokeWidth]="8"
+                            [nzFormat]="progressFormart"
+                            [nzStrokeColor]="(selectedShow?.vote_average<=64)? { '50%': '#f3f705'}:{ '100%': '#63cd82' }">
+                        </nz-progress>
+                        <span id="onHandset" class="rating">User Score</span>
+                    </div>
+                    <div class="user-score">
+                        <div class="like-show">
+                            <fa-icon id="{{selectedShow?.id}}" class="heart-icon" [ngClass]="isFavourite ? 'liked' : ''" nz-tooltip
+                                nzTooltipTitle="{{$Handset ? '' : (isFavourite ? 'Unlike show' : 'Like show')}}" nzTooltipColor="#d12e26"
+                                [icon]="['fas', 'heart']" (click)="likeShow($event)"></fa-icon>
+                        </div>
+                    </div>
+                    <div class="user-score" *ngIf="selectedShow?.homepage && selectedShow?.homepage !== ''">
+                        <p class="show-site">
+                            <a href="{{selectedShow.homepage}}" target="_blank">
+                                <fa-icon style="margin-right: 6px;" [icon]="['fas', 'play']"></fa-icon>
+                                Watch
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                
+                <h3 class="sub-title">Overview</h3>
+                <p nz-typography class="show-overview">{{selectedShow?.overview}}</p>
+
+                <h4 class="second-sub-title" style="margin-top: 12px;">
+                    Creators
+                </h4>
+                <p nz-typography>
+                    <span *ngFor="let creator of selectedShow.created_by; index as i">
+                        {{ creator?.name }}<span *ngIf="i !== selectedShow?.created_by?.length - 1">,</span>
+                    </span>
+                </p>
+            </div>
+        </article>
+
+        <article class="show-details">
+            <h1 nz-typography class="show-title">{{selectedShow?.name}}</h1>
+            <div *ngIf="isLoading; else contentsLoaded" class="spinner">
+                <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+            </div>
+            <ng-template #contentsLoaded>
+                <div class="show-summary">
+                    <p>
+                        <span class="text-muted">Rated</span>
+                        <span *ngIf="selectedShow?.adult; else forAll">
+                            <nz-avatar [nzShape]="'square'" nzText="PG" style="background-color:#87d068;"></nz-avatar>
+                        </span>
+                        <ng-template #forAll>
+                            <nz-avatar [nzShape]="'square'" nzText="N/A" style="background-color:#87d068;"></nz-avatar>
+                        </ng-template>
+                        <fa-icon class="dot-icon" [icon]="['fas', 'circle']"></fa-icon>
+
+                        <span *ngIf="selectedShow?.first_air_date">
+                            <span class="text-muted">First Air Date</span>
+                            {{ selectedShow?.first_air_date }}
+                            <fa-icon class="dot-icon" [icon]="['fas', 'circle']"></fa-icon>
+                        </span>
+
+                        <span *ngIf="selectedShow?.genres?.length > 0">
+                            <span class="text-muted">Genre</span>
+                            <span *ngFor="let genre of selectedShow?.genres; index as i">
+                                {{ genre?.name }}<span *ngIf="i !== selectedShow?.genres?.length - 1">,</span>
+                            </span>
+                            <fa-icon class="dot-icon" [icon]="['fas', 'circle']"></fa-icon>
+                        </span>
+
+                        <span>
+                            {{ selectedShow?.number_of_episodes }} Episodes
+                            <fa-icon class="dot-icon" [icon]="['fas', 'circle']"></fa-icon>
+                        </span>
+
+                        <span>
+                            <span class="text-muted">Runtime</span>
+                            {{ selectedShow?.runtime }}
+                        </span>
+                    </p>
+
+                    <div class="flex-container">
+                        <div class="user-score" *ngIf="selectedShow?.vote_average !== 0">
+                            <nz-progress nzType="circle" [nzPercent]="selectedShow?.vote_average" [nzWidth]="52" [nzStrokeWidth]="8"
+                                [nzFormat]="progressFormart"
+                                [nzStrokeColor]="(selectedShow?.vote_average<=64)? { '50%': '#f3f705'}:{ '100%': '#63cd82' }">
+                            </nz-progress>
+                            <span id="onHandset" class="rating">User Score</span>
+                        </div>
+                        <div class="user-score">
+                            <div class="like-show">
+                                <fa-icon id="{{selectedShow?.id}}" class="heart-icon" [ngClass]="isFavourite ? 'liked' : ''" nz-tooltip
+                                    nzTooltipTitle="{{$Handset ? '' : (isFavourite ? 'Unlike show' : 'Like show')}}" nzTooltipColor="#d12e26"
+                                    [icon]="['fas', 'heart']" (click)="likeShow($event)"></fa-icon>
+                            </div>
+                        </div>
+                        <div class="user-score" *ngIf="selectedShow?.homepage && selectedShow?.homepage !== ''">
+                            <p class="show-site">
+                                <a href="{{selectedShow.homepage}}" target="_blank">
+                                    <fa-icon style="margin-right: 6px;" [icon]="['fas', 'play']"></fa-icon>
+                                    Watch
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <h3 class="sub-title">Overview</h3>
+                    <p nz-typography class="show-overview">{{selectedShow?.overview}}</p>
+
+                    <div class="flex-container" *ngIf="selectedShow?.created_by?.length > 0">
+                        <div class="user-score" *ngFor="let creator of selectedShow.created_by">
+                            <h4 class="second-sub-title" style="margin-top: 12px;">
+                                {{ creator?.name }}
+                            </h4>
+                            <p style="color: rgb(255, 255, 255, 0.7); margin-top: 0;">
+                                Creator
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </article>
+    </section>
+    <div class="section-divider"></div>
+</main>
+
+<ng-template #invalidId>
+    <main class="show-not-found">
+        <section>
+            <article>
+                <h2 nz-typography class="not-found-header">TV Show not found!</h2>
+                <button (click)="goBack()" nz-button nzDanger nzType="default" [nzSize]="size" class="goback-button">
+                    <fa-icon class="btn-icon" [icon]="['fas', 'long-arrow-alt-left']"></fa-icon> Go Back
+                </button>
+            </article>
+        </section>
+    </main>
+</ng-template>
