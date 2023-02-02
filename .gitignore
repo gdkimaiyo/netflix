@@ -37,6 +37,9 @@ yarn-error.log
 testem.log
 /typings
 
-# System files
+# VARIABLES
+/src/secrets.config.ts
+
+# System Files
 .DS_Store
 Thumbs.db

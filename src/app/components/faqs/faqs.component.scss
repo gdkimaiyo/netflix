@@ -1,0 +1,86 @@
+@import '../../../global.scss';
+
+.section {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 1024px;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 3%;
+
+  @include respond-to(handhelds) {
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 10%;
+  }
+}
+.faqs {
+  width: 100%;
+  max-width: 100%;
+  padding: 24px 16px;
+  margin-top: 38px;
+  align-content: center;
+  flex-grow: 1;
+  @include respond-to(handhelds) {
+    padding: 16px;
+    margin: 0;
+  }
+}
+
+.faq-title {
+  color: rgb(255, 255, 255);
+  font-size: 48px;
+  @include respond-to(handhelds) {
+    font-size: 32px;
+  }
+}
+::ng-deep .ant-collapse {
+  background-color: rgba(21, 20, 20);
+  margin-bottom: 48px;
+  @include respond-to(handhelds) {
+    font-size: 18px;
+    text-align: left;
+  }
+}
+::ng-deep .ant-collapse-header {
+  font-size: 1.525rem;
+  color: rgb(255, 255, 255) !important;
+  @include respond-to(handhelds) {
+    font-size: 18px;
+  }
+}
+::ng-deep .ant-collapse-content {
+  border-top: 1px solid rgba(21, 20, 20) !important;
+}
+.faq-content {
+  font-size: 1.325rem;
+  color: rgb(255, 255, 255, 0.8);
+  @include respond-to(handhelds) {
+    font-size: 16px;
+  }
+}
+
+.get-started {
+    margin-bottom: 48px;
+}
+.sub-header {
+  color: rgb(255, 255, 255, 0.8);
+  font-size: 1.525rem;
+  @include respond-to(handhelds) {
+    font-size: 18px;
+  }
+}
+.browse-button {
+  border-radius: 8px;
+  border: rgba(209, 46, 38);
+  background-color: rgba(209, 46, 38);
+  @include respond-to(handhelds) {
+    text-align: center !important;
+  }
+}
+.browse-button:hover {
+  background-color: rgba(209, 46, 38);
+  border: rgba(209, 46, 38);
+}

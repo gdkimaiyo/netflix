@@ -1,0 +1,24 @@
+<section class="section">
+    <article class="faqs">
+        <h2 nz-typography class="faq-title">FAQs</h2>
+        <nz-collapse nzAccordion [nzBordered]="false">
+            <nz-collapse-panel #p [nzShowArrow]="false" *ngFor="let faq of faqs; index as i; first as isFirst"
+                [nzHeader]="faq.header" [nzActive]="faq.active" [nzExtra]="extraTpl" [ngStyle]="faq.customStyle">
+                <p class="faq-content">{{ faq.content }}</p>
+                <p class="faq-content" *ngIf="faq.content">{{ faq.content2 }}</p>
+
+                <ng-template #extraTpl>
+                    <fa-icon *ngIf="!p.nzActive" [icon]="['fas', 'plus']"></fa-icon>
+                    <fa-icon *ngIf="p.nzActive" [icon]="['fas', 'minus']"></fa-icon>
+                </ng-template>
+            </nz-collapse-panel>
+        </nz-collapse>
+        <nz-divider></nz-divider>
+        <div class="get-started">
+            <p nz-typography class="sub-header">Are you ready?</p>
+            <button routerLink="/movies" nz-button nzDanger nzType="primary" [nzSize]="size" class="browse-button">
+                Browse Movies
+            </button>
+        </div>
+    </article>
+</section>

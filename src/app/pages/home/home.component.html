@@ -1,1 +1,60 @@
-<h1 nz-typography class="main-header">Unlimited movies and TV Shows.</h1>
+<ng-template #pointer>
+    <fa-icon class="pointer" [icon]="['fas', 'angle-double-up']"></fa-icon>
+</ng-template>
+<main>
+    <nz-back-top [nzTemplate]="pointer"></nz-back-top>
+    <section class="section">
+        <article class="landing-info">
+            <h1 nz-typography class="main-header">Unlimited movies and TV Shows.</h1>
+            <p nz-typography class="sub-header">Browse for movies and add movies you like to your favourites list.</p>
+            <nz-divider></nz-divider>
+            <button id="onDesktop" routerLink="/movies" nz-button nzDanger nzType="primary" [nzSize]="size"
+                class="browse-button">
+                Browse Movies
+            </button>
+        </article>
+        <article class="random-movie">
+            <nz-card nzHoverable [nzCover]="coverTemplate" [nzActions]="[movieTitle]">
+                <nz-card-meta [nzDescription]="cardDesc">
+                </nz-card-meta>
+            </nz-card>
+            <ng-template #coverTemplate>
+                <nz-spin [nzSpinning]="isLoading">
+                    <img alt="randomly picked movie" src="{{imageURL}}" (click)="showMovieDetails()" />
+                </nz-spin>
+            </ng-template>
+            <ng-template #cardDesc>
+                <div class="user-score" *ngIf="!isLoading">
+                    <nz-progress nzType="circle" [nzPercent]="randomMovie.vote_average" [nzWidth]="45"
+                        [nzStrokeWidth]="7" [nzFormat]="progressFormart"
+                        [nzStrokeColor]="(randomMovie.vote_average<=64)? { '50%': '#f3f705'}:{ '100%': '#63cd82' }">
+                    </nz-progress>
+                </div>
+            </ng-template>
+            <ng-template #movieTitle>
+                <span class="movie-title" (click)="showMovieDetails()">{{randomMovie?.title}}</span>
+                <nz-spin [nzSpinning]="isLoading" nzSimple></nz-spin>
+            </ng-template>
+
+            <div id="onHandset" style="margin-top: 24px;">
+                <button routerLink="/movies" nz-button nzDanger nzType="primary" [nzSize]="size" class="browse-button">
+                    Browse Movies
+                </button>
+            </div>
+        </article>
+    </section>
+    <div class="section-divider"></div>
+    <section class="section">
+        <article class="like-gif">
+            <fa-icon class="heart-icon" [icon]="['fas', 'heart']"></fa-icon>
+        </article>
+        <article class="favourites-info">
+            <h2 nz-typography class="second-header">Add movies to your favourites list</h2>
+            <p nz-typography class="sub-second-header">
+                Save your favourites movies and quickly access them in the favourites page.</p>
+        </article>
+    </section>
+    <div class="section-divider"></div>
+    <app-faqs></app-faqs>
+    <div class="section-divider"></div>
+</main>
