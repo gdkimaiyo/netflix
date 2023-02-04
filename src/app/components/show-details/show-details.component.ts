@@ -51,6 +51,7 @@ export class ShowDetailsComponent implements OnInit {
     
     if (id) {
       this.getShowById(id);
+      this.isFavourite = this.getFavouriteState(id);
     } else {
       this.sendNotification('error', '','Error. unable to retrieve show details.',this.colorCodes.error,);
       this.isLoading = false;
@@ -61,7 +62,6 @@ export class ShowDetailsComponent implements OnInit {
   getShowById(id: number) {
     this.moviesService.getShowById(id).subscribe((res) => {
       this.selectedShow = res;
-      // console.log(this.selectedShow);
       if (this.selectedShow?.backdrop_path) {
         this.backdropURL = `https://image.tmdb.org/t/p/original${this.selectedShow.backdrop_path}`;
         this.backdropAvailable = true;
@@ -71,7 +71,7 @@ export class ShowDetailsComponent implements OnInit {
       if (this.selectedShow?.poster_path) {
         this.imageURL = `https://image.tmdb.org/t/p/original${this.selectedShow.poster_path}`;
       } else {
-        this.sendNotification('warning', '', 'Unable to load movie image', this.colorCodes.warning);
+        this.sendNotification('warning', '', 'Unable to load show image', this.colorCodes.warning);
       }
       this.selectedShow?.production_companies?.forEach((element: any) => {
         if (element.logo_path) {
@@ -108,12 +108,50 @@ export class ShowDetailsComponent implements OnInit {
     }
     
     // Local Storage
-    // if (!this.isFavourite) {
-    //   this.addFavourite();
-    // } else {
-    //   this.removeFavourite();
-    // }
-    // this.ngOnInit();
+    if (!this.isFavourite) {
+      this.addFavourite();
+    } else {
+      this.removeFavourite();
+    }
+    this.ngOnInit();
+  }
+
+  getFavouriteState(showId: number) {
+    // Check localStorage if current show is already in favourites list
+    if (localStorage.getItem("show_favourites") && typeof (Storage) !== undefined) {
+      const favourites = JSON.parse(localStorage.getItem("show_favourites") || '[]');
+      return (favourites?.filter((show: any) => show?.id === showId)?.length > 0) ? true : false
+    } else {
+      return false;
+    }
+  }
+
+  addFavourite() {
+    if (localStorage.getItem("show_favourites") && typeof (Storage) !== undefined) {
+      const favourites = JSON.parse(localStorage.getItem("show_favourites") || '[]');
+      favourites.push(this.selectedShow);
+      localStorage.setItem("show_favourites", JSON.stringify(favourites));
+      this.sendNotification('success', 'Show added to favourites', '', this.colorCodes.success,);
+      this.isFavourite = true;
+    } else {
+      if (typeof (Storage) !== undefined) {
+        const favourites = [];
+        favourites.push(this.selectedShow);
+        localStorage.setItem("show_favourites", JSON.stringify(favourites));
+        this.sendNotification('success', 'Show added to favourites', '', this.colorCodes.success,);
+        this.isFavourite = true;
+      } else {
+        this.sendNotification('warning', '', 'Unable to add Show to favourites list.', this.colorCodes.warning,);
+      }
+    }
+  }
+
+  removeFavourite() {
+    let favourites = JSON.parse(localStorage.getItem("show_favourites") || '[]');
+    favourites = favourites?.filter((show:any) => show?.id !== this.selectedShow?.id)
+    localStorage.setItem("show_favourites", JSON.stringify(favourites));
+    this.sendNotification('success', 'Show removed from favourites', '', this.colorCodes.success,);
+    this.isFavourite = false;
   }
 
   sendNotification(type: string, title: string, message: string, bgcolor: string): void {
