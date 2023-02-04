@@ -4,6 +4,25 @@ export const NOTIFICATION_CODES = {
   error: '#eb2d17',
   info: '#2bb9e0',
 };
+export const FETCH_NEXT_PAGE_ITEMS = (items: any, page: number, perPage: number) => {
+  if (items?.length > 0) {
+    if (page == 1) {
+      if ((page*perPage) <= items.length) {
+        return items.slice(page-1, (page*perPage));
+      } else {
+        return items.slice(page-1, items.length);
+      }
+    } else {
+      if ((page*perPage) <= items.length) {
+        return items.slice((page*perPage) - perPage, (page*perPage));
+      } else {
+        return items.slice((page*perPage) - perPage, items.length);
+      }
+    }
+  } else {
+    return [];
+  }
+};
 
 export const FAQS = [
   {

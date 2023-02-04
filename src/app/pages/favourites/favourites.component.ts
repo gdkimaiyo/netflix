@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MONTHS, NOTIFICATION_CODES } from '../../utils/constants';
+import { NzTabPosition } from 'ng-zorro-antd/tabs';
+import { MONTHS, NOTIFICATION_CODES, FETCH_NEXT_PAGE_ITEMS } from '../../utils/constants';
 
 @Component({
   selector: 'app-favourites',
@@ -10,13 +11,17 @@ import { MONTHS, NOTIFICATION_CODES } from '../../utils/constants';
   styleUrls: ['./favourites.component.scss']
 })
 export class FavouritesComponent implements OnInit {
+  position: NzTabPosition = 'top';
   colorCodes = NOTIFICATION_CODES;
   loading: boolean = false;
-  favourites: any;
+  favMovies: any;
   movies: any;
+  favShows: any;
+  shows: any;
   imageURL = "https://dummyimage.com/300x300/000/fff&text=Loading+Image+...";
 
-  totalMovies: number = 50; // By default favourites movies will be 50 in total 
+  totalMovies: number = 50; // By default favourites movies will be 50 in total
+  totalShows: number = 50; // By default favourites shows will be 50 in total
   perPage: number = 10; // Show 10 favourites per page
   page: number = 1; // Show first page of the favourites
 
@@ -28,11 +33,12 @@ export class FavouritesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
-    this.favourites = this.getFavourites();
-    this.totalMovies = (Math.ceil(this.favourites.length / 10)) * 10;
-    this.movies = this.fetchNextPageMovies(this.favourites, this.page, this.perPage);
+    this.page = 1;
+    this.favMovies = this.getFavourites("movies");
+    this.totalMovies = (Math.ceil(this.favMovies.length / 10)) * 10;
+    this.movies = FETCH_NEXT_PAGE_ITEMS(this.favMovies, this.page, this.perPage);
     // Populate movie image URL/src and Format date
-    this.favourites.forEach((element: any) => {
+    this.favMovies.forEach((element: any) => {
       element.imageURL = element?.poster_path !== null ?
         `https://image.tmdb.org/t/p/original${element.poster_path}` : this.imageURL;
 
@@ -42,12 +48,32 @@ export class FavouritesComponent implements OnInit {
         element.release_date = `${month} ${day}, ${year}`;
       }
     });
+
+    this.favShows = this.getFavourites("shows");;
+    this.totalShows = (Math.ceil(this.favShows.length / 10)) * 10;
+    this.shows = FETCH_NEXT_PAGE_ITEMS(this.favShows, this.page, this.perPage);
+    // Populate movie image URL/src
+    this.favShows.forEach((element: any) => {
+      element.imageURL = element?.poster_path !== null ?
+        `https://image.tmdb.org/t/p/original${element.poster_path}` : this.imageURL;
+    });
+
     this.loading = false;
   }
 
-  getFavourites() {
-    if (localStorage.getItem("movie_favourites") && typeof (Storage) !== undefined) {
-      return JSON.parse(localStorage.getItem("movie_favourites") || '[]');
+  getFavourites(category: string) {
+    if (category === "movies") {
+      if (localStorage.getItem("movie_favourites") && typeof (Storage) !== undefined) {
+        return JSON.parse(localStorage.getItem("movie_favourites") || '[]');
+      } else {
+        return [];
+      }
+    } else {
+      if (localStorage.getItem("show_favourites") && typeof (Storage) !== undefined) {
+        return JSON.parse(localStorage.getItem("show_favourites") || '[]');
+      } else {
+        return [];
+      }
     }
   }
 
@@ -62,39 +88,42 @@ export class FavouritesComponent implements OnInit {
     }
   }
 
-  removeMovie(movieId: number) {
+  showShowDetails(event: any) {
+    let showId = event.currentTarget.id;
+    if (parseInt(showId)) {
+      this.router.navigateByUrl(`show/${showId}`);
+    }
+  }
+
+  removeMovie(movieId: number, category: string) {
     // Remove movie from favourites
-    let favourites = JSON.parse(localStorage.getItem("movie_favourites") || '[]');
-    favourites = favourites?.filter((movie:any) => movie?.id !== movieId);
-    localStorage.setItem("movie_favourites", JSON.stringify(favourites));
-    this.sendNotification('success', 'Movie removed from favourites', '', this.colorCodes.success,);
+    if (category === "Movie") {
+      let favourites = JSON.parse(localStorage.getItem("movie_favourites") || '[]');
+      favourites = favourites?.filter((movie:any) => movie?.id !== movieId);
+      localStorage.setItem("movie_favourites", JSON.stringify(favourites));
+    } else {
+      let favourites = JSON.parse(localStorage.getItem("show_favourites") || '[]');
+      favourites = favourites?.filter((show:any) => show?.id !== movieId);
+      localStorage.setItem("show_favourites", JSON.stringify(favourites));
+    }
+
+    this.sendNotification('success', `${category} removed from favourites`, '', this.colorCodes.success,);
     this.ngOnInit();
   }
 
-  changePage(pg: number): void {
-    this.movies = this.fetchNextPageMovies(this.favourites, pg, this.perPage);
+  changePage(pg: number, category: string): void {
+    if (category === "movies") {
+      this.movies = FETCH_NEXT_PAGE_ITEMS(this.favMovies, pg, this.perPage);
+    } else {
+      this.shows = FETCH_NEXT_PAGE_ITEMS(this.favShows, pg, this.perPage);
+    }
+
     window.scrollTo(0,0);
     this.page = pg;
   }
 
-  fetchNextPageMovies(movies: any, page: number, perPage: number) {
-    if (movies?.length > 0) {
-      if (page == 1) {
-        if ((page*perPage) <= movies.length) {
-          return movies.slice(page-1, (page*perPage));
-        } else {
-          return movies.slice(page-1, movies.length);
-        }
-      } else {
-        if ((page*perPage) <= movies.length) {
-          return movies.slice((page*perPage) - perPage, (page*perPage));
-        } else {
-          return movies.slice((page*perPage) - perPage, movies.length);
-        }
-      }
-    } else {
-      return [];
-    }
+  tabClicked() {
+    this.page = 1;
   }
 
   sendNotification(type: string, title: string, message: string, bgcolor: string): void {
