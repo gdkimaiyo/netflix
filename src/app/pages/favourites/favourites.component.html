@@ -4,55 +4,93 @@
 
 <main class="main-page">
     <nz-back-top [nzTemplate]="pointer"></nz-back-top>
-    <section class="section" *ngIf="favourites?.length > 0; else emptyList">
+    <section class="section">
         <p class="go-back-btn">
             <a (click)="goBack()" style="color: rgba(209, 46, 38);">
                 <fa-icon style="padding-right: 8px;" [icon]="['fas', 'long-arrow-alt-left']"></fa-icon> Go Back
             </a>
         </p>
         <h1 nz-typography class="page-title">My Favourites</h1>
-        <article class="favourite">
-            <div [ngClass]="loading ? '' : 'movie-card'" *ngFor="let favourite of movies"
-                style="width: 100%; margin-right: 12px;">
-                <nz-card [nzLoading]="loading">
-                    <nz-card-meta [nzAvatar]="imageTemplate" [nzTitle]="cardTitle" [nzDescription]="descTemplate">
-                    </nz-card-meta>
-                </nz-card>
-                <ng-template #cardTitle>
-                    <span id="{{favourite?.id}}" (click)="showMovieDetails($event)">{{favourite?.title}}</span>
+        <nz-tabset [nzTabPosition]="position" [nzAnimated]="true" nzSize="small">
+            <nz-tab nzTitle="Movies" (nzClick)="tabClicked()">
+                <div class="" *ngIf="favMovies?.length > 0; else emptyList">
+                    <article class="favourite">
+                        <div [ngClass]="loading ? '' : 'movie-card'" *ngFor="let favourite of movies"
+                            style="width: 100%; margin-right: 12px;">
+                            <nz-card [nzLoading]="loading">
+                                <nz-card-meta [nzAvatar]="imageTemplate" [nzTitle]="cardTitle" [nzDescription]="descTemplate">
+                                </nz-card-meta>
+                            </nz-card>
+                            <ng-template #cardTitle>
+                                <span id="{{favourite?.id}}" (click)="showMovieDetails($event)">{{favourite?.title}}</span>
+                            </ng-template>
+                            <ng-template #imageTemplate>
+                                <img id="{{favourite?.id}}" (click)="showMovieDetails($event)" src="{{favourite.imageURL}}" alt="Favourite Movie Image">
+                            </ng-template>
+                            <ng-template #descTemplate>
+                                <div id="{{favourite?.id}}" (click)="showMovieDetails($event)" style="cursor: pointer;">
+                                    <p class="release-date">{{favourite?.release_date}}</p>
+                                    <p class="overview">{{favourite?.overview}}</p>
+                                </div>
+                                <p class="action-btns">
+                                    <a class="remove-btn" nz-button nzType="link" nz-popconfirm
+                                        nzOkText="Yes" nzPopconfirmTitle="Are you sure you want to remove from favourites?"
+                                        nzPopconfirmPlacement="top" (nzOnConfirm)="removeMovie(favourite?.id, 'Movie')">
+                                        <fa-icon style="margin-right: 6px;" [icon]="['fas', 'times']"></fa-icon>
+                                        Remove
+                                    </a>
+                                </p>
+                            </ng-template>
+                        </div>
+                        <div class="pagination">
+                            <nz-pagination [nzPageIndex]="page" [nzTotal]="totalMovies" (nzPageIndexChange)="changePage($event, 'movies')"></nz-pagination>
+                        </div>
+                    </article>
+                </div>
+                <ng-template #emptyList>
+                    <p style="color: white;">Your favourite movies list is empty.</p>
                 </ng-template>
-                <ng-template #imageTemplate>
-                    <img id="{{favourite?.id}}" src="{{favourite.imageURL}}" alt="Favourite Movie Image"
-                        (click)="showMovieDetails($event)">
-                </ng-template>
-                <ng-template #descTemplate>
-                    <p class="release-date">{{favourite?.release_date}}</p>
-                    <p class="overview">{{favourite?.overview}}</p>
-                    <p class="action-btns">
-                        <a class="remove-btn" nz-button nzType="link" nz-popconfirm
-                            nzOkText="Yes" nzPopconfirmTitle="Are you sure you want to remove from favourites?"
-                            nzPopconfirmPlacement="top" (nzOnConfirm)="removeMovie(favourite?.id)">
-                            <fa-icon style="margin-right: 6px;" [icon]="['fas', 'times']"></fa-icon>
-                            Remove
-                        </a>
-                    </p>
-                </ng-template>
-            </div>
-            <div class="pagination">
-                <nz-pagination [nzPageIndex]="page" [nzTotal]="totalMovies" (nzPageIndexChange)="changePage($event)"></nz-pagination>
-            </div>
-        </article>
-    </section>
+            </nz-tab>
 
-    <ng-template #emptyList>
-        <section class="section">
-            <p class="go-back-btn">
-                <a (click)="goBack()" style="color: rgba(209, 46, 38);">
-                    <fa-icon style="padding-right: 8px;" [icon]="['fas', 'long-arrow-alt-left']"></fa-icon> Go Back
-                </a>
-            </p>
-            <h1 nz-typography class="page-title">My Favourites</h1>
-            <p>Your favourites list is empty.</p>
-        </section>
-    </ng-template>
+            <nz-tab nzTitle="Shows" (nzClick)="tabClicked()">
+                <div class="" *ngIf="favShows?.length > 0; else emptyList2">
+                    <article class="favourite">
+                        <div [ngClass]="loading ? '' : 'movie-card'" *ngFor="let favourite of shows"
+                            style="width: 100%; margin-right: 12px;">
+                            <nz-card [nzLoading]="loading">
+                                <nz-card-meta [nzAvatar]="imageTemplate" [nzTitle]="cardTitle" [nzDescription]="descTemplate">
+                                </nz-card-meta>
+                            </nz-card>
+                            <ng-template #cardTitle>
+                                <span id="{{favourite?.id}}" (click)="showShowDetails($event)">{{favourite?.name}}</span>
+                            </ng-template>
+                            <ng-template #imageTemplate>
+                                <img id="{{favourite?.id}}" (click)="showShowDetails($event)" src="{{favourite.imageURL}}" alt="Favourite Movie Image">
+                            </ng-template>
+                            <ng-template #descTemplate>
+                                <div id="{{favourite?.id}}" (click)="showShowDetails($event)" style="cursor: pointer;">
+                                    <p class="release-date">{{favourite?.first_air_date}}</p>
+                                    <p class="overview">{{favourite?.overview}}</p>
+                                </div>
+                                <p class="action-btns">
+                                    <a class="remove-btn" nz-button nzType="link" nz-popconfirm
+                                        nzOkText="Yes" nzPopconfirmTitle="Are you sure you want to remove from favourites?"
+                                        nzPopconfirmPlacement="top" (nzOnConfirm)="removeMovie(favourite?.id, 'Show')">
+                                        <fa-icon style="margin-right: 6px;" [icon]="['fas', 'times']"></fa-icon>
+                                        Remove
+                                    </a>
+                                </p>
+                            </ng-template>
+                        </div>
+                        <div class="pagination">
+                            <nz-pagination [nzPageIndex]="page" [nzTotal]="totalShows" (nzPageIndexChange)="changePage($event, 'shows')"></nz-pagination>
+                        </div>
+                    </article>
+                </div>
+                <ng-template #emptyList2>
+                    <p style="color: white;">Your favourite shows list is empty.</p>
+                </ng-template>
+            </nz-tab>
+        </nz-tabset>
+    </section>
 </main>
