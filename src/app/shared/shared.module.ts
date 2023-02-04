@@ -17,6 +17,7 @@ import { NzProgressModule } from 'ng-zorro-antd/progress';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
 
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { 
@@ -63,6 +64,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
     NzPaginationModule,
     NzToolTipModule,
     NzPopconfirmModule,
+    NzTabsModule,
     FontAwesomeModule,
   ],
   exports: [
@@ -86,6 +88,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
     NzPaginationModule,
     NzToolTipModule,
     NzPopconfirmModule,
+    NzTabsModule,
     FontAwesomeModule,
   ],
 })

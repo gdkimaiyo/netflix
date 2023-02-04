@@ -26,6 +26,58 @@
   width: 100%;
   margin: 0 auto;
   max-width: 960px;
+
+  ::ng-deep .ant-tabs>.ant-tabs-nav .ant-tabs-nav-list {
+    display: table-row;
+    text-align: center;
+  }
+
+  ::ng-deep .ant-tabs-top>.ant-tabs-nav {
+    margin-bottom: 0;
+  }
+
+  ::ng-deep .ant-tabs-top>.ant-tabs-nav:before {
+    border: none;
+  }
+
+  ::ng-deep .ant-tabs-tab-btn,
+  ::ng-deep .ant-tabs-tab .ant-tabs-tab-btn {
+    color: rgb(255, 255, 255, 0.75);
+    font-weight: 500;
+  }
+
+  ::ng-deep .ant-tabs-nav-list .ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: #d12e26;
+  }
+
+  ::ng-deep .ant-tabs-nav .ant-tabs-tab {
+    font-size: 16px;
+    margin-bottom: 18px;
+    border-bottom: 1.5px solid rgba(21, 20, 20);
+
+    @include respond-to(handhelds) {
+      margin-bottom: 8px;
+      padding-right: 12px;
+      padding-left: 12px;
+      font-size: 14px;
+    }
+  }
+
+  ::ng-deep .ant-tabs-nav-list .ant-tabs-tab-active {
+    color: #d12e26 !important;
+    border-bottom: 1.5px solid #d12e26;
+  }
+
+  ::ng-deep .ant-tabs-tab+.ant-tabs-tab {
+    @include respond-to(handhelds) {
+      margin: 0;
+    }
+  }
+
+  ::ng-deep .ant-tabs-ink-bar {
+    display: none;
+  }
+
   @include respond-to(handhelds) {
     padding-left: 16px;
     width: 100%;
