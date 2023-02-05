@@ -69,7 +69,11 @@
   align-content: center;
   flex-grow: 1;
   @include respond-to(handhelds) {
-    display: none;
+    width: 100%;
+    max-width: 100%;
+    padding: 16px;
+    padding-top: 0;
+    margin: 0;
   }
 }
 
@@ -79,6 +83,12 @@
   @include respond-to(handhelds) {
     font-size: 32px;
     padding-bottom: 12px;
+  }
+}
+.show-ondesktop {
+  display: block;
+  @include respond-to(handhelds) {
+    display: none;
   }
 }
 
@@ -295,6 +305,78 @@
 .toggler-div {
   text-align: center;
   padding-top: 75vh;
+}
+
+.mini-section-divider {
+  width: 100%;
+  max-width: 100%;
+  border-bottom: 4px solid rgb(34, 34, 34,);
+  margin-top: 16px;
+  @include respond-to(handhelds) {
+    margin-top: 12px;
+  }
+}
+.facts-data {
+  width: 27%;
+  max-width: 27%;
+  margin-top: 6px;
+  margin-right: 24px;
+  border-radius: 8px;
+  height: 73px;
+
+  @include respond-to(handhelds) {
+    width: 45%;
+    max-width: 45%;
+    margin-right: 12px;
+    height: 85px;
+  }
+}
+.rating {
+  color: rgb(255, 255, 255);
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.production-company {
+  width: 45%;
+  max-width: 45%;
+
+  @include respond-to(handhelds) {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 6px;
+    margin-right: 12px;
+  }
+}
+
+.show-more-btn {
+  text-align: left !important;
+  margin-bottom: 12px;
+
+  a {
+    color: rgba(209, 46, 38);
+  }
+
+  .btn-icon {
+    padding-left: 4px;
+  }
+}
+.company-name,
+.company-logo {
+  padding-right: 12px;
+}
+.production-data {
+  width: 100%;
+  max-width: 100%;
+  margin-top: 12px;
+  margin-right: 24px;
+  border-radius: 8px;
+  height: fit-content;
+
+  @include respond-to(handhelds) {
+    margin-top: 6px;
+    margin-right: 12px;
+  }
 }
 
 // MOVIE NOT FOUND CSS
