@@ -19,6 +19,7 @@ export class ShowDetailsComponent implements OnInit {
   backdropAvailable: boolean = false;
   idIsInvalid: boolean = false;
   isFavourite: boolean = false;
+  loadMore: boolean = false;
   size: NzButtonSize = 'large';
   selectedShow: any;
   backdropURL: string = "assets/images/dave-hoefler-lsoogGC_5dg-unsplash.jpg";
@@ -174,6 +175,10 @@ export class ShowDetailsComponent implements OnInit {
 
   goBack(): void {
     this.location.back();
+  }
+
+  showMore(): void {
+    this.loadMore = !this.loadMore;
   }
 
   // HELPER FUNCTIONS
