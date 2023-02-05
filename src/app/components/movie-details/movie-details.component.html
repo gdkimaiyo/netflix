@@ -9,7 +9,7 @@
         </div>
     </section>
 </main>
-<main class="main-page" *ngIf="!isLoading && !idIsInvalid; else invalidId">
+<main class="main-page" *ngIf="!isLoading; else invalidId">
     <nz-back-top [nzTemplate]="pointer"></nz-back-top>
     <nz-spin [nzSpinning]="isLoading" [nzSize]="'large'" *ngIf="showBackdrop">
         <section class="backdrop-image" style="background-image: url('{{backdropURL}}');">
@@ -75,7 +75,7 @@
 </main>
 
 <ng-template #invalidId>
-    <main class="movie-not-found">
+    <main class="movie-not-found" *ngIf="idIsInvalid">
         <section>
             <article>
                 <h2 nz-typography class="not-found-header">Movie not found!</h2>
