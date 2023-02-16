@@ -45,8 +45,15 @@ export class MovieDetailsComponent implements OnInit {
     // const id = 768744; // No Awards
     if (id) {
       this.getMovie(id);
+      // Get Movie Recommendations
+      // this.getRecommendations(id);
     } else {
-      this.getOMDbMovie(this.route.snapshot.paramMap.get('id'));
+      this.sendNotification('warning', '',
+        'Error. Movie not found. Invalid movie Id',
+        this.colorCodes.warning,
+      );
+      this.isLoading = false;
+      this.idIsInvalid = true;
     }
   }
 
@@ -72,43 +79,11 @@ export class MovieDetailsComponent implements OnInit {
       this.selectedMovie.runtime = this.selectedMovie?.runtime ? this.formatRuntime(this.selectedMovie?.runtime) : '0';
       this.selectedMovie.budget = this.selectedMovie?.budget ? this.formatCurrency(this.selectedMovie?.budget) : '$0';
       this.selectedMovie.vote_average = this.selectedMovie?.vote_average ? Math.round(this.selectedMovie?.vote_average * 10) : 0;
-      this.selectedMovie.isFromSearch = false;
       this.getMoreDetails(this.selectedMovie?.imdb_id);
     }, error => {
       this.sendNotification('warning', '',
         error.error.message ? error.error.message : 'Error. Movie not found.',
         this.colorCodes.warning,
-      );
-      this.isLoading = false;
-      this.idIsInvalid = true;
-    });
-  }
-
-  getOMDbMovie(id: any) {
-    this.moviesService.getOMDb(id).subscribe((res) => {
-      this.moreDetails = res;
-      this.selectedMovie = res;
-      if (this.selectedMovie?.Poster !== "N/A") {
-        this.backdropURL = this.moreDetails.Poster;
-        this.imageURL = this.moreDetails.Poster;
-        this.backdropAvailable = true;
-      } else {
-        this.sendNotification('warning', '', 'Unable to load movie image', this.colorCodes.warning);
-        this.backdropAvailable = false;
-      }
-
-      this.selectedMovie.imdb_id = res.imdbID;
-      this.selectedMovie.title = this.selectedMovie?.Title;
-      this.selectedMovie.overview = this.selectedMovie?.Plot;
-      this.selectedMovie.runtime = (this.selectedMovie?.Runtime !== "N/A") ? this.formatRuntime(parseInt(this.selectedMovie?.Runtime.split(" ")[0])) : '0';
-      this.selectedMovie.budget = '$0';
-      this.selectedMovie.vote_average = (this.selectedMovie?.imdbRating !== "N/A") ? parseFloat(this.selectedMovie?.imdbRating) * 10 : 0;
-      this.selectedMovie.isFromSearch = true;
-      this.isLoading = false;
-    }, error => {
-      this.sendNotification('error', '',
-        error.error.message ? error.error.message : 'Error. unable to retrieve more movie details.',
-        this.colorCodes.error,
       );
       this.isLoading = false;
       this.idIsInvalid = true;
@@ -127,6 +102,17 @@ export class MovieDetailsComponent implements OnInit {
       this.isLoading = false;
     });
   }
+
+  // getRecommendations(id: number): void {
+  //   this.moviesService.getMovieRecommendations(id).subscribe((res) => {
+  //     console.log(res);
+  //   }, error => {
+  //     this.sendNotification('warning', '',
+  //       error.error.message ? error.error.message : 'Error. Movie Recommendations not found.',
+  //       this.colorCodes.warning,
+  //     );
+  //   });
+  // }
 
   sendNotification(type: string, title: string, message: string, bgcolor: string): void {
     this.notificationService.create(type, title, message, {
