@@ -79,7 +79,7 @@ export class ShowDetailsComponent implements OnInit {
           element.logo_path = `${this.logoURL}${element.logo_path}`;
         }
       });
-      let runtime = 0;
+      let runtime = 45; // Let each episode runtime to be 45mins by default
       if (this.selectedShow?.episode_run_time?.length > 0) {
         runtime = Math.max(...this.selectedShow.episode_run_time); // Maximum episode runtime
       }

@@ -9,7 +9,7 @@
         </div>
     </section>
 </main>
-<main class="main-page" *ngIf="!isLoading; else invalidId">
+<main class="main-page" *ngIf="!isLoading && selectedShow; else invalidId">
     <nz-back-top [nzTemplate]="pointer"></nz-back-top>
     <nz-spin [nzSpinning]="isLoading" [nzSize]="'large'" *ngIf="displayBackdrop">
         <section class="backdrop-image" style="background-image: url('{{backdropURL}}');">
@@ -80,12 +80,16 @@
                         </span>
 
                         <span>
-                            {{ selectedShow?.number_of_seasons }} Seasons
+                            {{ selectedShow?.number_of_seasons }}
+                            <span *ngIf="selectedShow?.number_of_seasons > 1"> Seasons</span>
+                            <span *ngIf="selectedShow?.number_of_seasons < 2"> Season</span>
                             <fa-icon class="dot-icon" [icon]="['fas', 'circle']"></fa-icon>
                         </span>
 
                         <span>
-                            {{ selectedShow?.number_of_episodes }} Episodes
+                            {{ selectedShow?.number_of_episodes }}
+                            <span *ngIf="selectedShow?.number_of_episodes > 1"> Episodes</span>
+                            <span *ngIf="selectedShow?.number_of_episodes < 2"> Episode</span>
                             <fa-icon class="dot-icon" [icon]="['fas', 'circle']"></fa-icon>
                         </span>
 

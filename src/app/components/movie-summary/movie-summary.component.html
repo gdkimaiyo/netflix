@@ -60,7 +60,7 @@
             <span id="onHandset" class="rating">User Score</span>
         </div>
         <div class="user-score">
-            <div class="like-movie" *ngIf="selectedMovie?.isFromSearch === false">
+            <div class="like-movie">
                 <fa-icon id="{{selectedMovie?.id}}" class="heart-icon" [ngClass]="isFavourite ? 'liked' : ''" nz-tooltip
                     nzTooltipTitle="{{$Handset ? '' : (isFavourite ? 'Unlike movie' : 'Like movie')}}" nzTooltipColor="#d12e26"
                     [icon]="['fas', 'heart']" (click)="likeMovie($event)"></fa-icon>
