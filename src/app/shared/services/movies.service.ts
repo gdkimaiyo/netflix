@@ -31,9 +31,9 @@ export class MoviesService {
     return this.http.get(`${this.movie}/${id}?api_key=${TMDB_API_KEY}`);
   }
 
-  // getMovieRecommendations(id: number): Observable<any> {
-  //   return this.http.get(`${this.movie}/${id}/recommendations?api_key=${TMDB_API_KEY}`);
-  // }
+  getMovieRecommendations(id: number): Observable<any> {
+    return this.http.get(`${this.movie}/${id}/recommendations?api_key=${TMDB_API_KEY}`);
+  }
 
   // Search a Movie by Title / Query String
   getMovieByTitle(title: string, page: number): Observable<any> {
