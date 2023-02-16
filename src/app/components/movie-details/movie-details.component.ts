@@ -46,7 +46,7 @@ export class MovieDetailsComponent implements OnInit {
     if (id) {
       this.getMovie(id);
       // Get Movie Recommendations
-      // this.getRecommendations(id);
+      this.getRecommendations(id);
     } else {
       this.sendNotification('warning', '',
         'Error. Movie not found. Invalid movie Id',
@@ -103,16 +103,16 @@ export class MovieDetailsComponent implements OnInit {
     });
   }
 
-  // getRecommendations(id: number): void {
-  //   this.moviesService.getMovieRecommendations(id).subscribe((res) => {
-  //     console.log(res);
-  //   }, error => {
-  //     this.sendNotification('warning', '',
-  //       error.error.message ? error.error.message : 'Error. Movie Recommendations not found.',
-  //       this.colorCodes.warning,
-  //     );
-  //   });
-  // }
+  getRecommendations(id: number): void {
+    this.moviesService.getMovieRecommendations(id).subscribe((res) => {
+      console.log(res);
+    }, error => {
+      this.sendNotification('warning', '',
+        error.error.message ? error.error.message : 'Error. Movie Recommendations not found.',
+        this.colorCodes.warning,
+      );
+    });
+  }
 
   sendNotification(type: string, title: string, message: string, bgcolor: string): void {
     this.notificationService.create(type, title, message, {
