@@ -78,15 +78,14 @@ export class MoviesComponent implements OnInit {
     if (this.searchTitle) {
       this.inProgress = true;
       this.getMovieByTitle(this.searchTitle, pg);
-      window.scrollTo({ top: 0, behavior: "smooth" });;
-      this.page = pg;
     } else {
       this.isLoading = true;
       this.fetchMovies(pg);
-      window.scrollTo({ top: 0, behavior: "smooth" });;
-      this.page = pg;
       this.savePageNumber(pg);
     }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    this.page = pg;
   }
 
   savePageNumber(page: number): void { // Save page number to local storage

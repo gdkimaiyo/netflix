@@ -13,6 +13,7 @@ import { MONTHS_SHORT, NOTIFICATION_CODES } from '../../utils/constants';
 export class ShowsComponent implements OnInit {
   colorCodes = NOTIFICATION_CODES;
   isLoading: boolean = false;
+  inProgress: boolean = false;
 
   imageURL: string = "assets/images/dave-hoefler-lsoogGC_5dg-unsplash.jpg";
   tmdb: string = "https://image.tmdb.org/t/p/original";
@@ -20,6 +21,7 @@ export class ShowsComponent implements OnInit {
 
   // All SHOWS - 20 per page
   shows: any = [];
+  totalShows: number = 5000; // By default shows will be 5000 in total
   page: number = 1; // Shows page number. 1 out of 500. Default page => 1
 
   form!: FormGroup;
@@ -38,6 +40,7 @@ export class ShowsComponent implements OnInit {
       searchTerm: [null, [Validators.required]],
     });
 
+    this.totalShows = 5000;
     this.page = this.getPageNumber();
     this.fetchShows(this.page);
   }
@@ -47,7 +50,7 @@ export class ShowsComponent implements OnInit {
       this.shows = res.results;
       this.shows.forEach((show: any) => {
         show.poster_path = show?.poster_path ? `${this.tmdb}${show?.poster_path}` : this.imageURL;
-        show.vote_average = show?.vote_average ? show?.vote_average * 10 : 0;
+        show.vote_average = show?.vote_average ? Math.round(show?.vote_average * 10) : 0;
         if (show?.first_air_date?.length > 0) {
           let splits = show.first_air_date.split("-");
           let year = splits[0], month = MONTHS_SHORT[parseInt(splits[1]) - 1], day = parseInt(splits[2]);
@@ -68,14 +71,40 @@ export class ShowsComponent implements OnInit {
 
   startSearch(): void {
     if (this.form.valid) {
-      console.log(this.form.value.searchTerm);
-      this.sendNotification(
-        'info',
-        'In Development',
-        'Search for a TV show is in development.',
-        this.colorCodes.info
-      );
+      this.inProgress = true;
+      this.searchTitle = this.form.value.searchTerm;
+      this.getTvShowByTitle(1, this.searchTitle);
+      this.page = 1;
+    } else {
+      this.searchTitle = undefined;
+      this.ngOnInit();
     }
+  }
+
+  getTvShowByTitle(page: number, title: string): void {
+    this.moviesService.getTvShowByTitle(page, title).subscribe((res) => {
+      this.totalShows = (Math.ceil(res.total_results / 20)) * 10;
+      this.shows = res.results;
+      this.shows.forEach((show: any) => {
+        show.poster_path = show?.poster_path ? `${this.tmdb}${show?.poster_path}` : this.imageURL;
+        show.vote_average = show?.vote_average ? Math.round(show?.vote_average * 10) : 0;
+        if (show?.first_air_date?.length > 0) {
+          let splits = show.first_air_date.split("-");
+          let year = splits[0], month = MONTHS_SHORT[parseInt(splits[1]) - 1], day = parseInt(splits[2]);
+          show.first_air_date = `${month} ${day}, ${year}`;
+        }
+      });
+      
+      this.inProgress = false;
+    },error => {
+      this.sendNotification(
+        'warning',
+        'Error',
+        error.error.message ? error.error.message : 'An error occured while searching for the TV show',
+        this.colorCodes.warning,
+      );
+      this.inProgress = false;
+    });
   }
 
   showTvDetails(event: any) {
@@ -84,11 +113,17 @@ export class ShowsComponent implements OnInit {
   }
 
   changePage(pg: number): void {
-    this.isLoading = true;
-    this.fetchShows(pg);
-    window.scrollTo(0,0);
+    if (this.searchTitle) {
+      this.inProgress = true;
+      this.getTvShowByTitle(pg, this.searchTitle);
+    } else {
+      this.isLoading = true;
+      this.fetchShows(pg);
+      this.savePageNumber(pg);
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
     this.page = pg;
-    this.savePageNumber(pg);
   }
 
   getPageNumber() { // Get page number from local storage
