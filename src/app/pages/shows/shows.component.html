@@ -54,10 +54,10 @@
         </article>
     </section>
 
-    <section class="section" *ngIf="shows?.length > 0 && !searchTitle">
+    <section class="section" *ngIf="shows?.length > 0">
         <!-- Pagination -->
         <article class="page-nav" *ngIf="!isLoading">
-            <nz-pagination [nzPageIndex]="page" [nzResponsive]="true" [nzTotal]="5000"
+            <nz-pagination [nzPageIndex]="page" [nzResponsive]="true" [nzTotal]="totalShows"
                 [nzItemRender]="renderItemTemplate" (nzPageIndexChange)="changePage($event)"></nz-pagination>
             <ng-template #renderItemTemplate let-type let-page="page">
                 <ng-container [ngSwitch]="type">

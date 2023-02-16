@@ -15,6 +15,7 @@ export class MoviesService {
 
   // TV Shows endpoints
   show: string = 'https://api.themoviedb.org/3/tv';
+  searchTV: string = 'https://api.themoviedb.org/3/search/tv';
   popularTV: string = 'https://api.themoviedb.org/3/tv/popular';
 
   constructor(private http: HttpClient) { }
@@ -34,6 +35,7 @@ export class MoviesService {
   //   return this.http.get(`${this.movie}/${id}/recommendations?api_key=${TMDB_API_KEY}`);
   // }
 
+  // Search a Movie by Title / Query String
   getMovieByTitle(title: string, page: number): Observable<any> {
     return this.http.get(`${this.search}?api_key=${TMDB_API_KEY}&query=${title}&page=${page}`);
   }
@@ -51,5 +53,11 @@ export class MoviesService {
 
   getShowById(id: number): Observable<any> {
     return this.http.get(`${this.show}/${id}?api_key=${TMDB_API_KEY}`);
+  }
+
+  // Search a TV Show by Title / Query String
+  getTvShowByTitle(page: number, title: string): Observable<any> {
+    return this.http.get(`${this.searchTV}?api_key=${TMDB_API_KEY}&page=${page}&query=${title}`);
+    // https://api.themoviedb.org/3/search/tv?api_key=0518ef053229e44210fcc9955fdb7d2b&language=en-US&page=1&query=The%20Blacklist&include_adult=false
   }
 }
