@@ -24,6 +24,7 @@ export class MoviesComponent implements OnInit {
 
   // All MOVIES - 20 per page
   movies: any = [];
+  totalMovies: number = 5000; // By default movies will be 5000 in total
   page: number = 1; // Movies page number. 1 out of 500. Default page => 1
 
   constructor(
@@ -35,6 +36,7 @@ export class MoviesComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading = true;
+    this.totalMovies = 5000;
     this.page = this.getPageNumber();
     this.fetchMovies(this.page);
 
@@ -48,7 +50,7 @@ export class MoviesComponent implements OnInit {
       this.movies = res.results;
       this.movies.forEach((movie: any) => {
         movie.poster_path = movie?.poster_path ? `${this.tmdb}${movie?.poster_path}` : this.imageURL;
-        movie.vote_average = movie?.vote_average ? movie?.vote_average * 10 : 0;
+        movie.vote_average = movie?.vote_average ? Math.round(movie?.vote_average * 10) : 0;
         if (movie?.release_date?.length > 0) {
           let splits = movie.release_date.split("-");
           let year = splits[0], month = MONTHS_SHORT[parseInt(splits[1]) - 1], day = parseInt(splits[2]);
@@ -73,11 +75,18 @@ export class MoviesComponent implements OnInit {
   }
 
   changePage(pg: number): void {
-    this.isLoading = true;
-    this.fetchMovies(pg);
-    window.scrollTo(0,0);
-    this.page = pg;
-    this.savePageNumber(pg);
+    if (this.searchTitle) {
+      this.inProgress = true;
+      this.getMovieByTitle(this.searchTitle, pg);
+      window.scrollTo({ top: 0, behavior: "smooth" });;
+      this.page = pg;
+    } else {
+      this.isLoading = true;
+      this.fetchMovies(pg);
+      window.scrollTo({ top: 0, behavior: "smooth" });;
+      this.page = pg;
+      this.savePageNumber(pg);
+    }
   }
 
   savePageNumber(page: number): void { // Save page number to local storage
@@ -98,28 +107,37 @@ export class MoviesComponent implements OnInit {
     if (this.form.valid) {
       this.inProgress = true;
       this.searchTitle = this.form.value.searchTerm;
-      this.moviesService.getMovieByTitle(this.searchTitle).subscribe((res) => {
-        this.movies = res;
-        this.movies.id = this.movies.imdbID;
-        this.movies.title = this.movies?.Title;
-        this.movies.release_date = this.movies?.Released;
-        this.movies.poster_path = (this.movies?.Poster !== "N/A") ? this.movies?.Poster : this.imageURL;
-        this.movies.vote_average = (this.movies?.imdbRating !== "N/A") ? parseFloat(this.movies?.imdbRating) * 10 : 0;
-        this.movies = [this.movies];
-        this.inProgress = false;
-      },error => {
-        this.sendNotification(
-          'warning',
-          'Error',
-          error.error.message ? error.error.message : 'An error occured while searching the movie',
-          this.colorCodes.warning,
-        );
-        this.inProgress = false;
-      });
+      this.getMovieByTitle(this.searchTitle, 1);
+      this.page = 1;
     } else {
       this.searchTitle = undefined;
       this.ngOnInit();
     }
+  }
+
+  getMovieByTitle(title: string, page: number): void {
+    this.moviesService.getMovieByTitle(title, page).subscribe((res) => {
+      this.totalMovies = (Math.ceil(res.total_results / 20)) * 10;
+      this.movies = res.results;
+      this.movies.forEach((movie: any) => {
+        movie.poster_path = movie?.poster_path ? `${this.tmdb}${movie?.poster_path}` : this.imageURL;
+        movie.vote_average = movie?.vote_average ? Math.round(movie?.vote_average * 10) : 0;
+        if (movie?.release_date?.length > 0) {
+          let splits = movie.release_date.split("-");
+          let year = splits[0], month = MONTHS_SHORT[parseInt(splits[1]) - 1], day = parseInt(splits[2]);
+          movie.release_date = `${month} ${day}, ${year}`;
+        }
+      });
+      this.inProgress = false;
+    },error => {
+      this.sendNotification(
+        'warning',
+        'Error',
+        error.error.message ? error.error.message : 'An error occured while searching the movie',
+        this.colorCodes.warning,
+      );
+      this.inProgress = false;
+    });
   }
 
   sendNotification(type: string, title: string, message: string, bgcolor: string): void {
