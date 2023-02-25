@@ -3,6 +3,8 @@
 .main-page {
   min-height: 93vh;
   width: 100%;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 .backdrop-image {
   min-height: 93vh;
@@ -24,13 +26,14 @@
     margin-left: 0;
   }
 }
-.section {
+.section,
+.suggestions {
   width: 100%;
   margin: 0 auto;
   max-width: 1200px;
   display: flex;
   flex-direction: row;
-  margin-bottom: 3%;
+  margin-bottom: 12px;
   margin-top: 3%;
 
   @include respond-to(handhelds) {
@@ -38,7 +41,7 @@
     text-align: center;
     width: 100%;
     max-width: 100%;
-    margin-bottom: 10%;
+    margin-bottom: 16px;
     margin-top: 5%;
   }
 }
@@ -113,12 +116,12 @@
 .movie-tagline {
   // color: rgba(209, 46, 38, 0.85);
   color: rgb(255, 255, 255, 0.5);
-  font-size: 20px;
+  font-size: 18px;
   padding-top: 12px;
   text-align: center;
   @include respond-to(handhelds) {
     padding-top: 12px;
-    font-size: 18px;
+    font-size: 16px;
   }
 }
 
@@ -162,6 +165,162 @@
   text-align: center;
   padding-top: 75vh;
 }
+
+// MOVIE RECOMMENDATIONS
+.recommendations {
+  background-color: rgba(48, 48, 48);
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.suggestions {
+  margin-top: 1%;
+  padding-bottom: 2%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0 !important;
+
+  @include respond-to(handhelds) {
+    margin-top: 2%;
+    padding-bottom: 0 !important;
+  }
+}
+
+.movie-list {
+  text-align: left;
+  padding: 16px;
+
+  @include respond-to(handhelds) {
+    margin-top: 2%;
+    margin-bottom: 10%;
+  }
+}
+
+.subtitle {
+  color: rgb(255, 255, 255);
+  font-size: 32px;
+  margin-top: 0;
+  padding-bottom: 16px;
+  @include respond-to(handhelds) {
+    font-size: 24px;
+    padding-bottom: 12px;
+  }
+}
+
+.all-list {
+  overflow: auto;
+  white-space: nowrap;
+  padding-bottom: 1%;
+
+  @include respond-to(handhelds) {
+    padding-bottom: 3%;
+  }
+}
+
+.all-list .movie-card {
+  display: inline-block;
+  width: 17%;
+  max-width: 17%;
+  margin-right: 20px;
+  margin-bottom: 18px;
+  text-align: center;
+
+  ::ng-deep .ant-card-body {
+    padding: 12px;
+    padding-bottom: 2px;
+    margin: 0;
+  }
+  ::ng-deep .ant-card {
+    height: 275px;
+  }
+  // ng-deep css within movie-card for css properties to be within this page ONLY
+  ::ng-deep .ant-card-meta-description {
+    text-align: left;
+  }
+  ::ng-deep .ant-card-actions {
+    border-top: none;
+  }
+  ::ng-deep .ant-card-actions>li {
+    margin: 0;
+    margin-bottom: 8px;
+    margin-left: 12px;
+    text-align: left;
+  }
+  ::ng-deep .ant-card-actions>li>span:hover,
+  ::ng-deep .ant-card-actions>li>span:first-child:hover {
+    color: rgba(0, 0, 0, 0.45);
+  }
+
+  ::ng-deep .ant-progress {
+    margin-right: 8px;
+    margin-bottom: 4px;
+    background-color: #0e243f;
+    padding: 4px;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+  }
+  ::ng-deep .ant-progress:hover {
+    font-weight: bold;
+  }
+  ::ng-deep .ant-progress-circle .ant-progress-text,
+  ::ng-deep .ant-progress-circle.ant-progress-status-success .ant-progress-text {
+    color: #ffffff;
+  }
+
+  ::ng-deep .ant-card-cover {
+    background-color: rgba(0, 0, 0);
+  }
+
+  img {
+    width: 100%;
+    height: 200px;
+  }
+
+  @include respond-to(handhelds) {
+    width: 45%;
+    max-width: 45%;
+    margin-right: 12px;
+    ::ng-deep .ant-card {
+      height: 226px;
+    }
+    img {
+      height: 150px;
+    }
+  }
+  @include respond-to(medium-screens) {
+    width: 28%;
+    max-width: 28%;
+  }
+}
+
+.suggested-movie-title {
+  margin-top: 4px;
+  font-size: 17px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.65);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  @include respond-to(handhelds) {
+    margin-top: 6px;
+  }
+}
+.suggested-movie-title:hover {
+  color: rgba(209, 46, 38, 0.8);
+}
+.card-action {
+  font-size: 18px;
+}
+.user-score {
+  bottom: 50px;
+  right: 8px;
+  position: absolute;
+  @include respond-to(handhelds) {
+    right: 4px;
+    bottom: 55px;
+  }
+}
+// end of MOVIE RECOMMENDATIONS
 
 // MOVIE NOT FOUND CSS
 .movie-not-found {

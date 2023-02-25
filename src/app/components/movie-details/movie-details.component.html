@@ -71,7 +71,48 @@
             </div>
         </article>
     </section>
-    <div class="section-divider"></div>
+    
+    <!-- <div class="section-divider"></div> -->
+
+    <div class="recommendations">
+        <section class="suggestions" *ngIf="!showBackdrop && selectedMovie">
+            <article class="movie-list">
+                <h1 nz-typography class="subtitle">Recommendations</h1>
+                <div class="all-list">
+                    <div *ngFor="let movie of recommendMovies" class="movie-card">
+                        <nz-card nzHoverable [nzCover]="coverTemplate" [nzActions]="[movieDetails]">
+                            <nz-card-meta [nzDescription]="movieDesc">
+                            </nz-card-meta>
+                        </nz-card>
+                        <ng-template #movieDesc>
+                            <div id="{{movie?.id}}" class="suggested-movie-title" *ngIf="!isProcessing"
+                                (click)="showMovieDetails($event)">
+                                {{movie?.title}}</div>
+                            <div class="user-score" *ngIf="!isProcessing">
+                                <nz-progress nzType="circle" [nzPercent]="movie.vote_average" [nzWidth]="38"
+                                    [nzStrokeWidth]="7" [nzFormat]="progressFormart"
+                                    [nzStrokeColor]="(movie.vote_average<=64)? { '50%': '#f3f705'}:{ '100%': '#63cd82' }">
+                                </nz-progress>
+                            </div>
+                            <nz-spin [nzSpinning]="isProcessing" style="text-align: center;" nzSimple></nz-spin>
+                        </ng-template>
+                        <ng-template #coverTemplate>
+                            <!-- <span style="color: #ffffff; text-align: center;">Loading ...</span> -->
+                            <nz-spin [nzSpinning]="isProcessing">
+                                <img id="{{movie?.id}}" alt="{{movie?.title}}" src="{{movie.poster_path}}"
+                                    (click)="showMovieDetails($event)" />
+                            </nz-spin>
+                        </ng-template>
+                        <ng-template #movieDetails>
+                            <span id="{{movie?.id}}" class="card-action" *ngIf="!isProcessing"
+                                (click)="showMovieDetails($event)">{{
+                                movie?.release_date }}</span>
+                        </ng-template>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </div>
 </main>
 
 <ng-template #invalidId>
