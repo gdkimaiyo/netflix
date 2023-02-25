@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit {
 
   getAllMovies(): void {
     this.isLoading = true;
-    this.page = this.randomNumber(1, 500); // Get random page from 1 to 500
+    this.page = this.randomNumber(1, 100); // Get random page from 1 to 500
 
     this.moviesService.getMovies(this.page).subscribe((res) => {
       const randomMovieIndex = this.randomNumber(0, 19);
