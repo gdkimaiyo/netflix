@@ -44,12 +44,12 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 - [x] I should be able to click on a movie and it should display more details about the movie like Rated, Released,  - Runtime, Genre, Director, Writer, Actors, Plot, Language, Country, Awards any other you want to display.
 - [x] I should be able to like movies / favourites and it should persist even if I refresh/reload the browser is (Use session storage)
 - [x] I should see favorites page that shows my favorite movies
+- [ ] Show movie recomendations
 
 - [ ] Repeat above for TV Shows
 
 **Bonus:**
 - [ ] Implement authentication in express js where as a user, I can persist my favorite movies forever and remove movies from my favorites list. Use any DB of your choice.
-- [ ] Use Firebase for your backend.
 
 ## License
 
