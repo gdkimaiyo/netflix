@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NzButtonSize } from 'ng-zorro-antd/button';
+import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MoviesService } from 'src/app/shared/services/movies.service';
-import { NOTIFICATION_CODES } from '../../utils/constants';
+import { MONTHS_SHORT, NOTIFICATION_CODES } from '../../utils/constants';
 
 @Component({
   selector: 'app-movie-details',
@@ -13,6 +14,7 @@ import { NOTIFICATION_CODES } from '../../utils/constants';
 })
 export class MovieDetailsComponent implements OnInit {
   isLoading: boolean = false;
+  isProcessing: boolean = false;
   showBackdrop: boolean = false;
   backdropAvailable: boolean = false;
   idIsInvalid: boolean = false;
@@ -24,9 +26,13 @@ export class MovieDetailsComponent implements OnInit {
   imageURL = "https://dummyimage.com/300x300/000/fff&text=Loading+Image+...";
   logoURL = "https://image.tmdb.org/t/p/original";
 
+  recommendMovies: any = [];
+  progressFormart = (percent: number): string => `${percent}%`;
+
   colorCodes = NOTIFICATION_CODES;
 
   constructor(
+    private router: Router,
     private location: Location,
     private route: ActivatedRoute,
     private moviesService: MoviesService,
@@ -35,6 +41,7 @@ export class MovieDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading = true;
+    this.isProcessing = true;
     const id = Number(this.route.snapshot.paramMap.get('id'));
     // const id = 547016; // The Old Guard. A Netflix movie
     // const id = 824920; // No rating, release date, runtime, rated
@@ -54,6 +61,7 @@ export class MovieDetailsComponent implements OnInit {
       );
       this.isLoading = false;
       this.idIsInvalid = true;
+      this.isProcessing = false;
     }
   }
 
@@ -105,12 +113,31 @@ export class MovieDetailsComponent implements OnInit {
 
   getRecommendations(id: number): void {
     this.moviesService.getMovieRecommendations(id).subscribe((res) => {
-      console.log(res);
+      this.recommendMovies = res.results;
+      this.recommendMovies.forEach((movie: any) => {
+        movie.poster_path = movie?.poster_path ? `${this.logoURL}${movie?.poster_path}` : this.imageURL;
+        movie.vote_average = movie?.vote_average ? Math.round(movie?.vote_average * 10) : 0;
+        if (movie?.release_date?.length > 0) {
+          let splits = movie.release_date.split("-");
+          let year = splits[0], month = MONTHS_SHORT[parseInt(splits[1]) - 1], day = parseInt(splits[2]);
+          movie.release_date = `${month} ${day}, ${year}`;
+        }
+      });
+      // this.recommendMovies.sort((a: any, b: any) => a.vote_average > b.vote_average ? -1 : 1);
+      this.isProcessing = false;
     }, error => {
       this.sendNotification('warning', '',
         error.error.message ? error.error.message : 'Error. Movie Recommendations not found.',
         this.colorCodes.warning,
       );
+      this.isProcessing = false;
+    });
+  }
+
+  showMovieDetails(event: any) {
+    let movieId = event.currentTarget.id;
+    this.router.navigate([`movie/${movieId}`]).then(() => {
+      window.location.reload();
     });
   }
 
