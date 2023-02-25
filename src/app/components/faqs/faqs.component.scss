@@ -31,9 +31,9 @@
 
 .faq-title {
   color: rgb(255, 255, 255);
-  font-size: 48px;
+  font-size: 38px;
   @include respond-to(handhelds) {
-    font-size: 32px;
+    font-size: 22px;
   }
 }
 ::ng-deep .ant-collapse {
@@ -45,20 +45,20 @@
   }
 }
 ::ng-deep .ant-collapse-header {
-  font-size: 1.525rem;
+  font-size: 18px;
   color: rgb(255, 255, 255) !important;
   @include respond-to(handhelds) {
-    font-size: 18px;
+    font-size: 16px;
   }
 }
 ::ng-deep .ant-collapse-content {
   border-top: 1px solid rgba(21, 20, 20) !important;
 }
 .faq-content {
-  font-size: 1.325rem;
+  font-size: 16px;
   color: rgb(255, 255, 255, 0.8);
   @include respond-to(handhelds) {
-    font-size: 16px;
+    font-size: 14px;
   }
 }
 
@@ -67,17 +67,19 @@
 }
 .sub-header {
   color: rgb(255, 255, 255, 0.8);
-  font-size: 1.525rem;
+  font-size: 18px;
   @include respond-to(handhelds) {
-    font-size: 18px;
+    font-size: 16px;
   }
 }
 .browse-button {
   border-radius: 8px;
   border: rgba(209, 46, 38);
   background-color: rgba(209, 46, 38);
+  font-size: 16px;
   @include respond-to(handhelds) {
     text-align: center !important;
+    font-size: 14px;
   }
 }
 .browse-button:hover {
