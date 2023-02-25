@@ -9,8 +9,12 @@
 .brand-logo {
   cursor: pointer;
   color: rgba(209, 46, 38);
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
+
+  @include respond-to(handhelds) {
+    font-size: 18px;
+  }
 }
 
 .nav-space {
@@ -25,7 +29,7 @@
 
 [nz-menu-item] {
   font-weight: 500;
-  font-size: 16px;
+  font-size: 14px;
   width: fit-content;
   border-bottom: none;
   color: rgba(209, 46, 38) !important;

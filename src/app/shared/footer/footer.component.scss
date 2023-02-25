@@ -58,13 +58,17 @@ ul {
 .brand-logo {
   cursor: pointer;
   color: rgba(209, 46, 38) !important;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
+
+  @include respond-to(handhelds) {
+    font-size: 18px;
+  }
 }
 .article-header {
   pointer-events: none;
   color: rgba(209, 46, 38) !important;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
 }
 footer ::ng-deep .ant-divider {

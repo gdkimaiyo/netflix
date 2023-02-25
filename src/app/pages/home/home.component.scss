@@ -176,23 +176,23 @@ main {
 }
 .sub-header {
   color: rgb(255, 255, 255, 0.8);
-  font-size: 1.625rem;
+  font-size: 24px;
   @include respond-to(handhelds) {
-    font-size: 24px;
+    font-size: 20px;
   }
 }
 .second-header {
   color: rgb(255, 255, 255);
-  font-size: 48px;
+  font-size: 42px;
   @include respond-to(handhelds) {
-    font-size: 32px;
+    font-size: 26px;
   }
 }
 .sub-second-header {
   color: rgb(255, 255, 255, 0.8);
-  font-size: 1.525rem;
+  font-size: 18px;
   @include respond-to(handhelds) {
-    font-size: 18px;
+    font-size: 16px;
   }
 }
 ::ng-deep .ant-divider {
