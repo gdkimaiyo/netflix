@@ -218,7 +218,47 @@
             </ng-template>
         </article>
     </section>
-    <div class="section-divider"></div>
+
+    <!-- <div class="section-divider"></div> -->
+
+    <div class="recommendations">
+        <section class="suggestions" *ngIf="!displayBackdrop && selectedShow">
+            <article class="show-list">
+                <h1 nz-typography class="subtitle">Recommendations</h1>
+                <div class="all-list">
+                    <div class="show-card" *ngFor="let show of recommendShows">
+                        <nz-card nzHoverable [nzCover]="coverTemplate" [nzActions]="[showDetails]">
+                            <nz-card-meta [nzDescription]="showDesc">
+                            </nz-card-meta>
+                        </nz-card>
+                        <ng-template #showDesc>
+                            <div id="{{show?.id}}" class="suggested-show-title" *ngIf="!isProcessing" (click)="showTvDetails($event)">
+                                {{show?.name}}</div>
+                            <div class="show-score" *ngIf="!isProcessing">
+                                <nz-progress nzType="circle" [nzPercent]="show.vote_average" [nzWidth]="38" [nzStrokeWidth]="7"
+                                    [nzFormat]="progressFormart"
+                                    [nzStrokeColor]="(show.vote_average<=64)? { '50%': '#f3f705'}:{ '100%': '#63cd82' }">
+                                </nz-progress>
+                            </div>
+                            <nz-spin [nzSpinning]="isProcessing" style="text-align: center;" nzSimple></nz-spin>
+                        </ng-template>
+                        <ng-template #coverTemplate>
+                            <!-- <span style="color: #ffffff; text-align: center;">Loading ...</span> -->
+                            <nz-spin [nzSpinning]="isProcessing">
+                                <img id="{{show?.id}}" alt="{{show?.name}}" src="{{show.poster_path}}"
+                                    (click)="showTvDetails($event)" />
+                            </nz-spin>
+                        </ng-template>
+                        <ng-template #showDetails>
+                            <span id="{{show?.id}}" class="card-action" *ngIf="!isProcessing"
+                                (click)="showTvDetails($event)">{{
+                                show?.first_air_date }}</span>
+                        </ng-template>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </div>
 </main>
 
 <ng-template #invalidId>
