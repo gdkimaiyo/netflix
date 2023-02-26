@@ -20,6 +20,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { MoviesComponent } from './pages/movies/movies.component';
 import { ShowsComponent } from './pages/shows/shows.component';
 import { ShowDetailsComponent } from './components/show-details/show-details.component';
+import { SignupComponent } from './pages/signup/signup.component';
 
 registerLocaleData(en);
 
@@ -34,7 +35,8 @@ registerLocaleData(en);
     LoginComponent,
     MoviesComponent,
     ShowsComponent,
-    ShowDetailsComponent
+    ShowDetailsComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
