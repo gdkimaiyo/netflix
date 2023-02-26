@@ -1,1 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+@import './global.scss';
+
+.pointer {
+  font-size: 28px;
+  color: #d12e26;
+
+  @include respond-to(handhelds) {
+    font-size: 20px;
+  }
+}
