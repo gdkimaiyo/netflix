@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NzButtonSize } from 'ng-zorro-antd/button';
 import { Location } from '@angular/common';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MoviesService } from 'src/app/shared/services/movies.service';
-import { MONTHS, NOTIFICATION_CODES } from '../../utils/constants';
+import { MONTHS, MONTHS_SHORT, NOTIFICATION_CODES } from '../../utils/constants';
 
 @Component({
   selector: 'app-show-details',
@@ -14,6 +14,7 @@ import { MONTHS, NOTIFICATION_CODES } from '../../utils/constants';
 })
 export class ShowDetailsComponent implements OnInit {
   isLoading: boolean = false;
+  isProcessing: boolean = false;
   $Handset: boolean = false;
   displayBackdrop: boolean = false;
   backdropAvailable: boolean = false;
@@ -26,10 +27,13 @@ export class ShowDetailsComponent implements OnInit {
   imageURL = "https://dummyimage.com/300x300/000/fff&text=Loading+Image+...";
   logoURL = "https://image.tmdb.org/t/p/original";
 
-  colorCodes = NOTIFICATION_CODES;
+  recommendShows: any = [];
   progressFormart = (percent: number): string => `${percent}%`;
+  
+  colorCodes = NOTIFICATION_CODES;
 
   constructor(
+    private router: Router,
     private location: Location,
     private route: ActivatedRoute,
     private moviesService: MoviesService,
@@ -39,6 +43,7 @@ export class ShowDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading = true;
+    this.isProcessing = true;
     const id = Number(this.route.snapshot.paramMap.get('id'));
     // const id = 60574 // Peaky Blinders
     // const id = 52814 // Halo
@@ -53,10 +58,13 @@ export class ShowDetailsComponent implements OnInit {
     if (id) {
       this.getShowById(id);
       this.isFavourite = this.getFavouriteState(id);
+      // Get Movie Recommendations
+      this.getRecommendations(id);
     } else {
       this.sendNotification('error', '','Error. unable to retrieve show details.',this.colorCodes.error,);
       this.isLoading = false;
       this.idIsInvalid = true;
+      this.isProcessing = false;
     }
   }
 
@@ -153,6 +161,35 @@ export class ShowDetailsComponent implements OnInit {
     localStorage.setItem("show_favourites", JSON.stringify(favourites));
     this.sendNotification('success', 'Show removed from favourites', '', this.colorCodes.success,);
     this.isFavourite = false;
+  }
+
+  getRecommendations(id: number): void {
+    this.moviesService.getShowRecommendations(id).subscribe((res) => {
+      this.recommendShows = res.results;
+      this.recommendShows.forEach((show: any) => {
+        show.poster_path = show?.poster_path ? `${this.logoURL}${show?.poster_path}` : this.imageURL;
+        show.vote_average = show?.vote_average ? Math.round(show?.vote_average * 10) : 0;
+        if (show?.first_air_date?.length > 0) {
+          let splits = show.first_air_date.split("-");
+          let year = splits[0], month = MONTHS_SHORT[parseInt(splits[1]) - 1], day = parseInt(splits[2]);
+          show.first_air_date = `${month} ${day}, ${year}`;
+        }
+      });
+      this.isProcessing = false;
+    }, error => {
+      this.sendNotification('warning', '',
+        error.error.message ? error.error.message : 'Error. Show recommendations not found.',
+        this.colorCodes.warning,
+      );
+      this.isProcessing = false;
+    });
+  }
+
+  showTvDetails(event: any) {
+    let showId = event.currentTarget.id;
+    this.router.navigate([`show/${showId}`]).then(() => {
+      window.location.reload();
+    });
   }
 
   sendNotification(type: string, title: string, message: string, bgcolor: string): void {

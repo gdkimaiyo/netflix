@@ -32,7 +32,7 @@ export class MoviesService {
   }
 
   getMovieRecommendations(id: number): Observable<any> {
-    return this.http.get(`${this.movie}/${id}/recommendations?api_key=${TMDB_API_KEY}`);
+    return this.http.get(`${this.movie}/${id}/recommendations?api_key=${TMDB_API_KEY}&page=1`);
   }
 
   // Search a Movie by Title / Query String
@@ -59,5 +59,9 @@ export class MoviesService {
   getTvShowByTitle(page: number, title: string): Observable<any> {
     return this.http.get(`${this.searchTV}?api_key=${TMDB_API_KEY}&page=${page}&query=${title}`);
     // https://api.themoviedb.org/3/search/tv?api_key=0518ef053229e44210fcc9955fdb7d2b&language=en-US&page=1&query=The%20Blacklist&include_adult=false
+  }
+
+  getShowRecommendations(id: number): Observable<any> {
+    return this.http.get(`${this.show}/${id}/recommendations?api_key=${TMDB_API_KEY}&page=1`);
   }
 }

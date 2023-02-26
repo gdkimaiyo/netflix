@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NzButtonSize } from 'ng-zorro-antd/button';
-import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MoviesService } from 'src/app/shared/services/movies.service';
@@ -127,7 +126,7 @@ export class MovieDetailsComponent implements OnInit {
       this.isProcessing = false;
     }, error => {
       this.sendNotification('warning', '',
-        error.error.message ? error.error.message : 'Error. Movie Recommendations not found.',
+        error.error.message ? error.error.message : 'Error. Movie recommendations not found.',
         this.colorCodes.warning,
       );
       this.isProcessing = false;
