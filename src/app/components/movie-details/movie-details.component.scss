@@ -188,10 +188,12 @@
 .movie-list {
   text-align: left;
   padding: 16px;
+  padding-right: 0;
 
   @include respond-to(handhelds) {
     margin-top: 2%;
     margin-bottom: 10%;
+    padding-right: 12px;
   }
 }
 
