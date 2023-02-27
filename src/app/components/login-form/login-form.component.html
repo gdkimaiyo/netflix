@@ -1,0 +1,55 @@
+<div class="content">
+    <form nz-form [formGroup]="form" class="form" (ngSubmit)="onSubmit(form.value)">
+        <p class="form-label">Username (Your Email Address)</p>
+        <nz-form-item>
+            <nz-form-control nzHasFeedback [nzErrorTip]="emailErrorTpl">
+                <nz-input-group class="normal-input">
+                    <input class="input" type="email" nz-input formControlName="email" placeholder="Email Address" />
+                </nz-input-group>
+                <ng-template #emailErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('invalidEmail')">Provide a valid email address</ng-container>
+                    <ng-container *ngIf="control.hasError('required')">Username is required!</ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <p class="form-label">Password</p>
+        <nz-form-item>
+            <nz-form-control [nzErrorTip]="passErrorTpl">
+                <nz-input-group class="normal-input" [nzSuffix]="suffixTemplate">
+                    <input class="input" [type]="passwordVisible ? 'text' : 'password'" nz-input 
+                        formControlName="password" placeholder="Your Password" />
+                </nz-input-group>
+                <ng-template #suffixTemplate>
+                    <fa-icon *ngIf="!passwordVisible" [icon]="['fas', 'eye']"
+                        (click)="passwordVisible = !passwordVisible">
+                    </fa-icon>
+                    <fa-icon *ngIf="passwordVisible" [icon]="['fas', 'eye-slash']"
+                        (click)="passwordVisible = !passwordVisible">
+                    </fa-icon>
+                  </ng-template>
+                <ng-template #passErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">Password is required!</ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <p nz-typography style="display: none;">
+            <button nz-button nzType="primary" class="submit-btn" [disabled]="!form.valid"
+                [nzLoading]="isLoading">
+                Submit
+            </button>
+        </p>
+    </form>
+
+    <div class="form-footer">
+        <button nz-button nzType="primary" class="submit-btn" [nzLoading]="isLoading" (click)="submitForm()">
+            Login
+        </button>
+
+        <a nz-button nzType="link">Forgot password</a>
+
+        <p class="login-info">Don't have an account? <span class="signup-link" (click)="goTo()">Sign up for free</span></p>
+    </div>
+</div>
+
