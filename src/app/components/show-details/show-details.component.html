@@ -221,7 +221,7 @@
 
     <!-- <div class="section-divider"></div> -->
 
-    <div class="recommendations">
+    <div class="recommendations" *ngIf="recommendShows?.length > 0">
         <section class="suggestions" *ngIf="!displayBackdrop && selectedShow">
             <article class="show-list">
                 <h1 nz-typography class="subtitle">Recommendations</h1>
