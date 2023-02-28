@@ -2,10 +2,33 @@
     <section class="signup-form">
         <h5 nz-typography class="subtitle">Welcome</h5>
 
-        <h1 nz-typography class="page-title">Register for an account</h1>
-
-        <div>Fill out the form below to get started. It is free.</div>
-
-        <app-register-form></app-register-form>
+        <div class="section">
+            <div class="the-form">
+                <h1 nz-typography class="page-title">Register for an account</h1>
+                <div>Fill out the form below to get started. It is free.</div>
+                <app-register-form></app-register-form>
+            </div>
+            <div class="section-info">
+                <h1 nz-typography class="info-title">Benefits of signing up</h1>
+                <p class="benefits">
+                    <span>
+                        <fa-icon class="check-icon" [icon]="['fas', 'circle-check']"></fa-icon>
+                    </span>
+                    Be able to add movies ot TV shows you like to your favourite list
+                </p>
+                <p class="benefits">
+                    <span>
+                        <fa-icon class="check-icon" [icon]="['fas', 'circle-check']"></fa-icon>
+                    </span>
+                    Keep track of your favourite movies and TV shows
+                </p>
+                <p class="benefits">
+                    <span>
+                        <fa-icon class="check-icon" [icon]="['fas', 'circle-check']"></fa-icon>
+                    </span>
+                    Get recommendations for a movies or TV shows
+                </p>
+            </div>
+        </div>
     </section>
 </main>

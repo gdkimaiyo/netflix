@@ -30,8 +30,12 @@ section {
 }
 
 .page-title {
-  font-size: 24px;
+  font-size: 32px;
   font-weight: 700;
   margin-top: 0;
   color: #ffffff;
+
+  @include respond-to(handhelds) {
+    font-size: 28px;
+  }
 }
