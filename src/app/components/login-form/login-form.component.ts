@@ -69,6 +69,15 @@ export class LoginFormComponent implements OnInit {
     return;
   }
 
+  forgotPass(): void {
+    this.sendNotification(
+      'info',
+      '',
+      'Feature is in development. It will be available soon. ',
+      this.colorCodes.info
+    );
+  }
+
   goTo(): void {
     this.router.navigate(['register']);
   }
