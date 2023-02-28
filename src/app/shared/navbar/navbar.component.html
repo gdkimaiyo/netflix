@@ -22,7 +22,12 @@
         </li>
         <li nz-menu-item class="on-handset" (click)="login()">
             <button nz-button nzDanger nzType="primary" class="menu-button">
-                Sign In
+                Login
+            </button>
+        </li>
+        <li nz-menu-item class="on-handset" (click)="navigateTo('/register')">
+            <button nz-button nzDanger nzType="primary" class="menu-button2">
+                Sign Up
             </button>
         </li>
     </ul>
@@ -44,9 +49,15 @@
                 Favourites
             </li>
             <li nz-menu-item (click)="login()"
-                style="border-bottom: none; margin-left: 16px ; margin-right: 8px ;">
+                style="border-bottom: none; margin-left: 8px ; margin-right: 4px ;">
                 <button nz-button nzDanger nzType="primary" class="menu-button">
-                    Sign In
+                    Login
+                </button>
+            </li>
+            <li nz-menu-item (click)="navigateTo('/register')"
+                style="border-bottom: none; margin-left: 0 ; margin-right: 8px ;">
+                <button nz-button nzDanger nzType="primary" class="menu-button2">
+                    Sign Up
                 </button>
             </li>
         </ul>
