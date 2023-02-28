@@ -74,3 +74,16 @@
   background-color: rgba(209, 46, 38);
   border: rgba(209, 46, 38);
 }
+
+.menu-button2 {
+  width: 100%;
+  border-radius: 4px;
+  color: rgba(209, 46, 38);
+  border: rgba(255, 255, 255);
+  background-color: rgba(255, 255, 255);
+}
+.menu-button2:hover {
+  color: rgba(209, 46, 38);
+  border: rgba(255, 255, 255, 0.85);
+  background-color: rgba(255, 255, 255, 0.85);
+}

@@ -12,12 +12,14 @@ section {
 .signup-form {
   background-color: rgba(48, 48, 48);
   width: 100%;
-  max-width: 860px;
+  max-width: 1024px;
   margin: 0 auto;
   min-height: 93vh;
   padding: 128px;
 
   @include respond-to(handhelds) {
+    width: 100%;
+    max-width: 100%;
     padding: 64px 16px;
   }
 }
@@ -30,8 +32,81 @@ section {
 }
 
 .page-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-top: 0;
+  color: #ffffff;
+
+  @include respond-to(handhelds) {
+    font-size: 28px;
+  }
+}
+
+.info-title {
   font-size: 24px;
   font-weight: 700;
   margin-top: 0;
   color: #ffffff;
+}
+
+.section {
+  display: flex;
+  flex-direction: row;
+
+  @include respond-to(handhelds) {
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+.the-form {
+  width: 60%;
+  max-width: 60%;
+  margin-top: 24px;
+  margin-right: 24px;
+  // align-content: center;
+  flex-grow: 1;
+
+  @include respond-to(handhelds) {
+    width: 100%;
+    max-width: 100%;
+    padding-bottom: 4px;
+    margin: 0;
+  }
+}
+
+.section-info {
+  width: 40%;
+  max-width: 40%;
+  margin-top: 32px;
+  margin-left: 24px;
+  padding: 0 16px;
+  // align-content: center;
+  flex-grow: 1;
+
+  @include respond-to(handhelds) {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    padding-top: 24px;
+    margin: 0;
+  }
+}
+
+.benefits {
+  margin-top: 28px;
+
+  @include respond-to(handhelds) {
+    margin-top: 14px;
+  }
+}
+
+.check-icon {
+  padding-right: 12px;
+  font-size: 18px;
+
+  @include respond-to(handhelds) {
+    padding-right: 6px;
+  }
 }

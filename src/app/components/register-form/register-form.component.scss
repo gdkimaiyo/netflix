@@ -33,3 +33,7 @@
   padding-left: 6px;
   text-decoration: underline;
 }
+
+::ng-deep .ant-form-item-explain, .ant-form-item-extra {
+  color: #ffff00;
+}
