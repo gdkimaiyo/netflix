@@ -1,0 +1,91 @@
+<div class="content">
+    <form nz-form [formGroup]="form" class="form" (ngSubmit)="onSubmit(form.value)">
+        <p class="form-label">Your Full Name *</p>
+        <nz-form-item>
+            <nz-form-control nzHasFeedback [nzErrorTip]="nameErrorTpl" nzValidatingTip="Validating...">
+                <nz-input-group>
+                    <input class="input" type="text" nz-input formControlName="name" placeholder="Full Name" />
+                </nz-input-group>
+                <ng-template #nameErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('missingLastName')">Both first and last name required</ng-container>
+                    <ng-container *ngIf="control.hasError('required')">Full name is required!</ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <p class="form-label">Your Email Address *</p>
+        <nz-form-item>
+            <nz-form-control nzHasFeedback [nzErrorTip]="emailErrorTpl" nzValidatingTip="Validating...">
+                <nz-input-group>
+                    <input class="input" type="email" nz-input formControlName="email" placeholder="Email Address" />
+                </nz-input-group>
+                <ng-template #emailErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('invalidEmail')">Provide a valid email address</ng-container>
+                    <ng-container *ngIf="control.hasError('required')">Username is required!</ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <p class="form-label">Password * (At least 4 characters)</p>
+        <nz-form-item>
+            <nz-form-control nzHasFeedback [nzErrorTip]="passErrorTpl" nzValidatingTip="Validating...">
+                <nz-input-group [nzSuffix]="suffixTemplate">
+                    <input class="input" [type]="passwordVisible ? 'text' : 'password'" nz-input 
+                        formControlName="password" placeholder="Password" />
+                </nz-input-group>
+                <ng-template #suffixTemplate>
+                    <fa-icon *ngIf="!passwordVisible" [icon]="['fas', 'eye']"
+                        (click)="passwordVisible = !passwordVisible">
+                    </fa-icon>
+                    <fa-icon *ngIf="passwordVisible" [icon]="['fas', 'eye-slash']"
+                        (click)="passwordVisible = !passwordVisible">
+                    </fa-icon>
+                  </ng-template>
+                <ng-template #passErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('invalidPass')">Password must be at least 4 characters</ng-container>
+                    <ng-container *ngIf="control.hasError('required')">Password is required!</ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <p class="form-label">Confirm Password *</p>
+        <nz-form-item>
+            <nz-form-control nzHasFeedback [nzErrorTip]="pass2ErrorTpl" nzValidatingTip="Validating...">
+                <nz-input-group [nzSuffix]="suffix2Template">
+                    <input class="input" [type]="confirmPassVisible ? 'text' : 'password'" nz-input 
+                        formControlName="confirmPassword" placeholder="Confirm Password" />
+                </nz-input-group>
+                <ng-template #suffix2Template>
+                    <fa-icon *ngIf="!confirmPassVisible" [icon]="['fas', 'eye']"
+                        (click)="confirmPassVisible = !confirmPassVisible">
+                    </fa-icon>
+                    <fa-icon *ngIf="confirmPassVisible" [icon]="['fas', 'eye-slash']"
+                        (click)="confirmPassVisible = !confirmPassVisible">
+                    </fa-icon>
+                  </ng-template>
+                <ng-template #pass2ErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('invalidPass2')">Passwords must match</ng-container>
+                    <ng-container *ngIf="control.hasError('required')">Password is required!</ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <p nz-typography style="display: none;">
+            <button nz-button nzType="primary" class="submit-btn" [disabled]="!form.valid"
+                [nzLoading]="isLoading">
+                Submit
+            </button>
+        </p>
+    </form>
+
+    <div class="form-footer">
+        <button nz-button nzType="primary" class="submit-btn" [nzLoading]="isLoading" (click)="register()">
+            Register
+        </button>
+
+        <p class="register-info">
+            Already have an account? <span class="login-link" (click)="goTo()">Login</span>
+        </p>
+    </div>
+</div>
+
