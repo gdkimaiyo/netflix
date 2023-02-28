@@ -26,6 +26,7 @@ import {
   faAngleRight,
   faBars,
   faCircle,
+  faCircleCheck,
   faEye,
   faEyeSlash,
   faFrown,
@@ -118,6 +119,7 @@ export class SharedModule {
       faSearch,
       faEye,
       faEyeSlash,
+      faCircleCheck,
     );
   }
 }
