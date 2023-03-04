@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { Observable, Observer } from 'rxjs';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { UserService } from 'src/app/shared/services/user.service';
 import { NOTIFICATION_CODES } from '../../utils/constants';
 
 @Component({
@@ -27,6 +29,8 @@ export class RegisterFormComponent implements OnInit {
   constructor(
     public router: Router,
     private fb: FormBuilder,
+    private authService: AuthService,
+    private userService: UserService,
     private notificationService: NzNotificationService
   ) {}
 
@@ -68,12 +72,37 @@ export class RegisterFormComponent implements OnInit {
       lastname: this.getName('last', this.form.value.name),
       password: this.form.value.password,
     }
-    console.log(payload);
 
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 1000);
-    return;
+    this.authService.register(payload).subscribe(
+      (res) => {
+        this.sendNotification('success', 'Success', 'Registration successfull', this.colorCodes.success);
+        const action = {
+          userId: res?.data?._id,
+          action: "Registered for an account"
+        }
+        this.userService.saveUserLogs(action).subscribe((result) => {});
+        this.isLoading = false;
+        this.router.navigate(['login']);
+      },
+      (err) => {
+        if (err?.response?.status === 409) {
+          this.sendNotification(
+            'warning',
+            'Registration Failed',
+            err.error.message,
+            this.colorCodes.error,
+          );
+        } else {
+          this.sendNotification(
+            'warning',
+            'Registration Failed',
+            err.error.message ? err.error.message : 'Something went wrong. Please check your connection.',
+            this.colorCodes.error,
+          );
+        }
+        this.isLoading = false;
+      },
+    );
   }
 
   goTo(): void {

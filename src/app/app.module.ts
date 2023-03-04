@@ -24,6 +24,8 @@ import { SignupComponent } from './pages/signup/signup.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { RegisterFormComponent } from './components/register-form/register-form.component';
 
+import { httpInterceptorProviders } from './shared/helpers/http.interceptor';
+
 registerLocaleData(en);
 
 @NgModule({
@@ -52,6 +54,7 @@ registerLocaleData(en);
     BrowserAnimationsModule
   ],
   providers: [
+    httpInterceptorProviders,
     { provide: NZ_I18N, useValue: en_US }
   ],
   bootstrap: [AppComponent]

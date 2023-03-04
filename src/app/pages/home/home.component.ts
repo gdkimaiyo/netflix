@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzButtonSize } from 'ng-zorro-antd/button';
+// import { UserService } from 'src/app/shared/services/user.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MoviesService } from 'src/app/shared/services/movies.service';
-// import { UserService } from 'src/app/shared/services/user.service';
 import { NOTIFICATION_CODES } from '../../utils/constants';
 
 @Component({
@@ -25,9 +25,9 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private router: Router,
+    // private userService: UserService,
     private moviesService: MoviesService,
     private notificationService: NzNotificationService,
-    // private userService: UserService,
   ) { }
 
   ngOnInit(): void {
