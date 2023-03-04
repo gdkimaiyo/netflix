@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpBackend, HttpClient } from '@angular/common/http';
 import { TMDB_API_KEY, OMDB_API } from 'src/secrets.config';
 
 @Injectable({
@@ -18,50 +18,56 @@ export class MoviesService {
   searchTV: string = 'https://api.themoviedb.org/3/search/tv';
   popularTV: string = 'https://api.themoviedb.org/3/tv/popular';
 
-  constructor(private http: HttpClient) { }
+  // Inject HttpBackend to dispatch requests directly to the backend, 
+  // without going through the interceptor chain.
+  private _http: HttpClient;
+
+  constructor(private http: HttpBackend) {
+    this._http = new HttpClient(http);
+  }
 
   /**
    * Movies
    */
   getMovies(page: number): Observable<any> {
-    return this.http.get(`${this.popular}?api_key=${TMDB_API_KEY}&page=${page}`);
+    return this._http.get(`${this.popular}?api_key=${TMDB_API_KEY}&page=${page}`);
   }
 
   getMovieById(id: number): Observable<any> {
-    return this.http.get(`${this.movie}/${id}?api_key=${TMDB_API_KEY}`);
+    return this._http.get(`${this.movie}/${id}?api_key=${TMDB_API_KEY}`);
   }
 
   getMovieRecommendations(id: number): Observable<any> {
-    return this.http.get(`${this.movie}/${id}/recommendations?api_key=${TMDB_API_KEY}&page=1`);
+    return this._http.get(`${this.movie}/${id}/recommendations?api_key=${TMDB_API_KEY}&page=1`);
   }
 
   // Search a Movie by Title / Query String
   getMovieByTitle(title: string, page: number): Observable<any> {
-    return this.http.get(`${this.search}?api_key=${TMDB_API_KEY}&query=${title}&page=${page}`);
+    return this._http.get(`${this.search}?api_key=${TMDB_API_KEY}&query=${title}&page=${page}`);
   }
 
   getOMDb(id: string): Observable<any> {
-    return this.http.get(`${this.OMDb}/?apikey=${OMDB_API}&i=${id}`);
+    return this._http.get(`${this.OMDb}/?apikey=${OMDB_API}&i=${id}`);
   }
 
   /**
    * TV Shows
    */
   getShows(page: number): Observable<any> {
-    return this.http.get(`${this.popularTV}?api_key=${TMDB_API_KEY}&page=${page}`);
+    return this._http.get(`${this.popularTV}?api_key=${TMDB_API_KEY}&page=${page}`);
   }
 
   getShowById(id: number): Observable<any> {
-    return this.http.get(`${this.show}/${id}?api_key=${TMDB_API_KEY}`);
+    return this._http.get(`${this.show}/${id}?api_key=${TMDB_API_KEY}`);
   }
 
   // Search a TV Show by Title / Query String
   getTvShowByTitle(page: number, title: string): Observable<any> {
-    return this.http.get(`${this.searchTV}?api_key=${TMDB_API_KEY}&page=${page}&query=${title}`);
+    return this._http.get(`${this.searchTV}?api_key=${TMDB_API_KEY}&page=${page}&query=${title}`);
     // https://api.themoviedb.org/3/search/tv?api_key=0518ef053229e44210fcc9955fdb7d2b&language=en-US&page=1&query=The%20Blacklist&include_adult=false
   }
 
   getShowRecommendations(id: number): Observable<any> {
-    return this.http.get(`${this.show}/${id}/recommendations?api_key=${TMDB_API_KEY}&page=1`);
+    return this._http.get(`${this.show}/${id}/recommendations?api_key=${TMDB_API_KEY}&page=1`);
   }
 }
