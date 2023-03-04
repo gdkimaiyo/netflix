@@ -13,4 +13,8 @@ export class UserService {
   getUsers(): Observable<any> {
     return this.http.get(`${environment.backendApi}/api/v1/users`);
   }
+
+  saveUserLogs(payload: any): Observable<any> {
+    return this.http.post(`${environment.backendApi}/api/v1/userlogs`, payload);
+  }
 }
