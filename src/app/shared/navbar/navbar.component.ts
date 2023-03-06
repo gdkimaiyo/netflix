@@ -19,6 +19,7 @@ export class NavbarComponent implements OnInit {
   );
 
   userProfile: any;
+  userInitials: any;
   authenticated: boolean = false;
 
   constructor(
@@ -35,6 +36,7 @@ export class NavbarComponent implements OnInit {
     }
 
     this.userProfile = this.storageService.getUser();
+    this.userInitials = `${this.userProfile?.firstname?.charAt(0)}${this.userProfile?.lastname?.charAt(0)}`;
   }
 
   navigateTo(name: string = ''): void {
@@ -48,7 +50,9 @@ export class NavbarComponent implements OnInit {
     };
     this.userService.saveUserLogs(action).subscribe((result) => {});
     this.authService.logout();
-    this.router.navigate(['login']);
+    this.router.navigate(['login']).then(() => {
+      window.location.reload();
+    });
     this.authenticated = false;
   }
 

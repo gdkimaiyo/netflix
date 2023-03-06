@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
+import { httpInterceptorProviders } from './shared/helpers/http.interceptor';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
@@ -23,8 +24,7 @@ import { ShowDetailsComponent } from './components/show-details/show-details.com
 import { SignupComponent } from './pages/signup/signup.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { RegisterFormComponent } from './components/register-form/register-form.component';
-
-import { httpInterceptorProviders } from './shared/helpers/http.interceptor';
+import { ProfileComponent } from './pages/profile/profile.component';
 
 registerLocaleData(en);
 
@@ -42,7 +42,8 @@ registerLocaleData(en);
     ShowDetailsComponent,
     SignupComponent,
     LoginFormComponent,
-    RegisterFormComponent
+    RegisterFormComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
