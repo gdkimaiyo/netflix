@@ -85,19 +85,19 @@ export class LoginFormComponent implements OnInit {
         };
         this.userService.saveUserLogs(action).subscribe((result) => {});
         this.isLoading = false;
-        this.router.navigate(['/']);
+        this.router.navigate(['/']).then(() => {
+          window.location.reload();
+        });
       },
       (err) => {
-        if (err?.response?.status === 400 ||
-          err?.response?.status === 404
-        ) {
+        if (err?.status === 400 || err?.status === 404) {
           this.sendNotification(
             'warning',
             'Login failed',
             'Email or password do not match.',
             this.colorCodes.error,
           );
-          if (err?.response?.status === 400) {
+          if (err?.status === 400) {
             const action = {
               userId: err?.response?.data?.data?._id,
               action: 'Attempted to sign in to your account: Email or password do not match.',

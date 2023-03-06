@@ -85,11 +85,11 @@ export class RegisterFormComponent implements OnInit {
         this.router.navigate(['login']);
       },
       (err) => {
-        if (err?.response?.status === 409) {
+        if (err?.status === 409) {
           this.sendNotification(
             'warning',
             'Registration Failed',
-            err.error.message,
+            'Email already registered',
             this.colorCodes.error,
           );
         } else {
