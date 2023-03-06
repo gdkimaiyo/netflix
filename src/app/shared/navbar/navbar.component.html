@@ -11,6 +11,9 @@
 
 <nz-dropdown-menu #mobileMenu="nzDropdownMenu">
     <ul nz-menu nzMode="vertical">
+        <li nz-menu-item class="on-handset" (click)="navigateTo('/')">
+            Home
+        </li>
         <li nz-menu-item class="on-handset" (click)="navigateTo('/movies')">
             TV Movies
         </li>
@@ -30,6 +33,10 @@
                 Sign Up
             </button>
         </li>
+        <li nz-menu-item class="on-handset" (click)="navigateTo('/profile')" *ngIf="authenticated">
+            <fa-icon [icon]="['fas', 'user']" style="padding-right: 6px;"></fa-icon>
+            My Profile
+        </li>
         <li nz-menu-item class="on-handset" (click)="logout()" *ngIf="authenticated">
             <button nz-button nzDanger nzType="primary" class="menu-button2">
                 Logout
@@ -41,6 +48,10 @@
 <ng-template #normalMenu>
     <div>
         <ul nz-menu nzMode="horizontal" style="border-bottom: none;">
+            <li nz-menu-item (click)="navigateTo('/')"
+                style="border-bottom: none; margin-left: 8px ; margin-right: 8px ;">
+                Home
+            </li>
             <li nz-menu-item (click)="navigateTo('/movies')"
                 style="border-bottom: none; margin-left: 8px ; margin-right: 8px ;">
                 TV Movies
@@ -65,13 +76,28 @@
                     Sign Up
                 </button>
             </li>
-            <li nz-menu-item (click)="logout()"
+            <li nz-menu-item nz-dropdown [nzDropdownMenu]="profileMenu" nzTrigger="click"
                 *ngIf="authenticated" style="border-bottom: none; margin-left: 8px ; margin-right: 4px ;">
                 <button nz-button nzDanger nzType="primary" class="menu-button2">
-                    Logout
+                    <nz-avatar [nzSize]="24" [nzText]="userInitials" style="background-color:#d12e26;"></nz-avatar>
+                    <span style="padding-left: 6px;">Profile</span>
                 </button>
             </li>
         </ul>
     </div>
 </ng-template>
+
+<nz-dropdown-menu #profileMenu="nzDropdownMenu">
+    <ul nz-menu nzMode="vertical">
+        <li nz-menu-item class="on-handset" (click)="navigateTo('/profile')">
+            <fa-icon [icon]="['fas', 'user']" style="padding-right: 6px;"></fa-icon>
+            My Profile
+        </li>
+        <li nz-menu-item class="on-handset" (click)="logout()">
+            <button nz-button nzDanger nzType="primary" class="menu-button2">
+                Logout
+            </button>
+        </li>
+    </ul>
+</nz-dropdown-menu>
 
