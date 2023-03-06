@@ -1,0 +1,110 @@
+@import '../../../global.scss';
+
+.profile-page {
+  color: #ffffff;
+}
+
+.profile-banner {
+  width: 100%;
+  min-height: 35vh;
+  background-color: rgba(48, 48, 48);
+}
+.banner-content {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  margin: 0;
+  padding-top: 8vh;
+
+  @include respond-to(handhelds) {
+    padding-top: 12vh;
+  }
+}
+
+.user-name,
+.user-image {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  // justify-content: center;
+}
+.user-name {
+  margin-right: 48px;
+
+  @include respond-to(medium-screens) {
+    margin-right: 32px;
+  }
+
+  @include respond-to(handhelds) {
+    margin-right: 18px;
+  }
+}
+
+.profile-name {
+  text-align: center;
+}
+
+.page-header {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 38px;
+
+  @include respond-to(handhelds) {
+    font-size: 28px;
+  }
+}
+
+.subtitle2 {
+  font-size: .875rem;
+  font-weight: 500;
+  line-height: 1.375rem;
+  letter-spacing: .00714em;
+}
+
+::ng-deep .ant-avatar {
+  font-size: 48px;
+  font-weight: 500;
+
+  @include respond-to(handhelds) {
+    font-size: 32px;
+  }
+}
+
+.main-section {
+  width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
+  margin-top: 24px;
+  padding: 16px;
+}
+.mini-section-divider {
+  width: 100%;
+  max-width: 100%;
+  border-bottom: 1.5px solid rgb(34, 34, 34,);
+  margin-top: 8px;
+  margin-bottom: 16px;
+
+  @include respond-to(handhelds) {
+    margin-bottom: 12px;
+  }
+}
+.text-muted {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+  line-height: 1.7rem;
+  letter-spacing: 0.00937em;
+}
+.href-link {
+  color: #d12e26;
+  cursor: pointer;
+}
+
+.subtitle {
+  color: #ffffff;
+  font-size: 20px;
+
+  @include respond-to(handhelds) {
+    font-size: 18px;
+  }
+}

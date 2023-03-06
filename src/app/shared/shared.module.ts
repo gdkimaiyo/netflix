@@ -38,7 +38,8 @@ import {
   faPlay,
   faPlus,
   faSearch,
-  faTimes, 
+  faTimes,
+  faUser
 } from '@fortawesome/free-solid-svg-icons';
 import { faGithubSquare, faLinkedin, faTwitterSquare } from '@fortawesome/free-brands-svg-icons';
 
@@ -120,6 +121,7 @@ export class SharedModule {
       faEye,
       faEyeSlash,
       faCircleCheck,
+      faUser,
     );
   }
 }
