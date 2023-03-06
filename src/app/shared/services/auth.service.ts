@@ -17,4 +17,16 @@ export class AuthService {
   register(payload: any): Observable<any> {
     return this.http.post(`${environment.backendApi}/api/v1/auth/register`, payload, httpOptions);
   }
+
+  login(payload: any): Observable<any> {
+    return this.http.post(`${environment.backendApi}/api/v1/auth/login`, payload, httpOptions);
+  }
+
+  verifyUser(payload: any): Observable<any> {
+    return this.http.post(`${environment.backendApi}/api/v1/auth/verify`, payload, httpOptions);
+  }
+
+  logout(): void {
+    localStorage.removeItem("nflix_user");
+  }
 }

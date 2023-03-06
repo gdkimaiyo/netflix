@@ -36,7 +36,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## TODO
 
-### USer Story
+### User Story
 
 **As a User:**
 - [x] I should be able to view all movies: The Movie Image, Movie Title, and Year of Production. ( Use APIs e.g themoviedb API)
