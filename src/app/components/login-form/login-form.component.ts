@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 import { Observable, Observer } from 'rxjs';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { UserService } from 'src/app/shared/services/user.service';
+import { StorageService } from 'src/app/shared/services/storage.service';
 import { NOTIFICATION_CODES } from '../../utils/constants';
 
 @Component({
@@ -24,6 +27,9 @@ export class LoginFormComponent implements OnInit {
   constructor(
     public router: Router,
     private fb: FormBuilder,
+    private authService: AuthService,
+    private userService: UserService,
+    private storageService: StorageService,
     private notificationService: NzNotificationService
   ) {}
 
@@ -60,13 +66,57 @@ export class LoginFormComponent implements OnInit {
     const payload = {
       email: this.form.value.email,
       password: this.form.value.password,
-    }
-    console.log(payload);
+    };
 
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 1000);
-    return;
+    this.authService.login(payload).subscribe(
+      (res) => {
+        this.sendNotification(
+          'success',
+          'Success',
+          'Login successful.',
+          this.colorCodes.success
+        );
+        
+        this.storageService.saveUser(res?.data);
+
+        const action = {
+          userId: res?.data?._id,
+          action: 'Signed in to your account',
+        };
+        this.userService.saveUserLogs(action).subscribe((result) => {});
+        this.isLoading = false;
+        this.router.navigate(['/']);
+      },
+      (err) => {
+        if (err?.response?.status === 400 ||
+          err?.response?.status === 404
+        ) {
+          this.sendNotification(
+            'warning',
+            'Login failed',
+            'Email or password do not match.',
+            this.colorCodes.error,
+          );
+          if (err?.response?.status === 400) {
+            const action = {
+              userId: err?.response?.data?.data?._id,
+              action: 'Attempted to sign in to your account: Email or password do not match.',
+            };
+            this.userService.saveUserLogs(action).subscribe((result) => {}); 
+          }
+        } else {
+          this.sendNotification(
+            'warning',
+            'Login Failed',
+            err.error.message 
+              ? err.error.message 
+              : 'Something went wrong while signing in. Please check your connection.',
+            this.colorCodes.error,
+          );
+        }
+        this.isLoading = false;
+      }
+    );
   }
 
   forgotPass(): void {

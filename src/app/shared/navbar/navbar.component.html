@@ -20,14 +20,19 @@
         <li nz-menu-item class="on-handset" (click)="navigateTo('/movies/favourites')">
             Favourites
         </li>
-        <li nz-menu-item class="on-handset" (click)="login()">
+        <li nz-menu-item class="on-handset" (click)="login()" *ngIf="!authenticated">
             <button nz-button nzDanger nzType="primary" class="menu-button">
                 Login
             </button>
         </li>
-        <li nz-menu-item class="on-handset" (click)="navigateTo('/register')">
+        <li nz-menu-item class="on-handset" (click)="navigateTo('/register')" *ngIf="!authenticated">
             <button nz-button nzDanger nzType="primary" class="menu-button2">
                 Sign Up
+            </button>
+        </li>
+        <li nz-menu-item class="on-handset" (click)="logout()" *ngIf="authenticated">
+            <button nz-button nzDanger nzType="primary" class="menu-button2">
+                Logout
             </button>
         </li>
     </ul>
@@ -49,15 +54,21 @@
                 Favourites
             </li>
             <li nz-menu-item (click)="login()"
-                style="border-bottom: none; margin-left: 8px ; margin-right: 4px ;">
+                *ngIf="!authenticated" style="border-bottom: none; margin-left: 8px ; margin-right: 4px ;">
                 <button nz-button nzDanger nzType="primary" class="menu-button">
                     Login
                 </button>
             </li>
             <li nz-menu-item (click)="navigateTo('/register')"
-                style="border-bottom: none; margin-left: 0 ; margin-right: 8px ;">
+                *ngIf="!authenticated" style="border-bottom: none; margin-left: 0 ; margin-right: 8px ;">
                 <button nz-button nzDanger nzType="primary" class="menu-button2">
                     Sign Up
+                </button>
+            </li>
+            <li nz-menu-item (click)="logout()"
+                *ngIf="authenticated" style="border-bottom: none; margin-left: 8px ; margin-right: 4px ;">
+                <button nz-button nzDanger nzType="primary" class="menu-button2">
+                    Logout
                 </button>
             </li>
         </ul>
