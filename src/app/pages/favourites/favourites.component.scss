@@ -144,6 +144,10 @@
     cursor: pointer;
   }
 
+  ::ng-deep .ant-card-meta-title:hover {
+    color: rgba(209, 46, 38);
+  }
+
   .release-date {
     color: rgba(0, 0, 0, 0.5);
     margin-top: 0;

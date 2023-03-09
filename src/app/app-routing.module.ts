@@ -21,7 +21,7 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'movie/:id', component: MovieDetailsComponent },
   { path: 'show/:id', component: ShowDetailsComponent },
-  { path: 'movies/favourites', component: FavouritesComponent },
+  { path: 'profile/favourites', component: FavouritesComponent },
   { path: '**', component: NotFoundComponent }, // 404 - Not Found page
 ];
 
