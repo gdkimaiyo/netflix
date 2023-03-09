@@ -20,9 +20,6 @@
         <li nz-menu-item class="on-handset" (click)="navigateTo('/shows')">
             TV Shows
         </li>
-        <li nz-menu-item class="on-handset" (click)="navigateTo('/movies/favourites')">
-            Favourites
-        </li>
         <li nz-menu-item class="on-handset" (click)="login()" *ngIf="!authenticated">
             <button nz-button nzDanger nzType="primary" class="menu-button">
                 Login
@@ -36,6 +33,10 @@
         <li nz-menu-item class="on-handset" (click)="navigateTo('/profile')" *ngIf="authenticated">
             <fa-icon [icon]="['fas', 'user']" style="padding-right: 6px;"></fa-icon>
             My Profile
+        </li>
+        <li nz-menu-item class="on-handset" (click)="navigateTo('/favourites')" *ngIf="authenticated">
+            <fa-icon [icon]="['fas', 'heart']" style="padding-right: 6px;"></fa-icon>
+            My Favourites
         </li>
         <li nz-menu-item class="on-handset" (click)="logout()" *ngIf="authenticated">
             <button nz-button nzDanger nzType="primary" class="menu-button2">
@@ -59,10 +60,6 @@
             <li nz-menu-item (click)="navigateTo('/shows')"
                 style="border-bottom: none; margin-left: 8px ; margin-right: 8px ;">
                 TV Shows
-            </li>
-            <li nz-menu-item (click)="navigateTo('/movies/favourites')"
-                style="border-bottom: none; margin-left: 8px ; margin-right: 8px ;">
-                Favourites
             </li>
             <li nz-menu-item (click)="login()"
                 *ngIf="!authenticated" style="border-bottom: none; margin-left: 8px ; margin-right: 4px ;">
@@ -92,6 +89,10 @@
         <li nz-menu-item class="on-handset" (click)="navigateTo('/profile')">
             <fa-icon [icon]="['fas', 'user']" style="padding-right: 6px;"></fa-icon>
             My Profile
+        </li>
+        <li nz-menu-item class="on-handset" (click)="navigateTo('/profile/favourites')">
+            <fa-icon [icon]="['fas', 'heart']" style="padding-right: 6px;"></fa-icon>
+            My Favourites
         </li>
         <li nz-menu-item class="on-handset" (click)="logout()">
             <button nz-button nzDanger nzType="primary" class="menu-button2">

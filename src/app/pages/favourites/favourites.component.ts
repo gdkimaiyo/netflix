@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTabPosition } from 'ng-zorro-antd/tabs';
+import { StorageService } from 'src/app/shared/services/storage.service';
 import { MONTHS, NOTIFICATION_CODES, FETCH_NEXT_PAGE_ITEMS } from '../../utils/constants';
 
 @Component({
@@ -28,10 +29,14 @@ export class FavouritesComponent implements OnInit {
   constructor(
     private router: Router,
     private location: Location,
+    private storageService: StorageService,
     private notificationService: NzNotificationService,
   ) { }
 
   ngOnInit(): void {
+    if (!this.storageService.isLoggedIn()) {
+      this.router.navigate(['/']);
+    }
     this.loading = true;
     this.page = 1;
     this.favMovies = this.getFavourites("movies");
