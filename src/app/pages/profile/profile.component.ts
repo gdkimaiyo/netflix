@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { formatDate } from "@angular/common";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { StorageService } from 'src/app/shared/services/storage.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
@@ -47,6 +48,12 @@ export class ProfileComponent implements OnInit {
       'Feature is in development. It will be available soon. ',
       this.colorCodes.info
     );
+  }
+
+  formattedDate(mydate: Date) {
+    const format = "MMM d, y";
+    const locale = "en-US";
+    return formatDate(mydate, format, locale);
   }
 
   sendNotification(type: string, title: string, message: string, bgcolor: string): void {
