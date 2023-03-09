@@ -34,7 +34,7 @@
             <fa-icon [icon]="['fas', 'user']" style="padding-right: 6px;"></fa-icon>
             My Profile
         </li>
-        <li nz-menu-item class="on-handset" (click)="navigateTo('/favourites')" *ngIf="authenticated">
+        <li nz-menu-item class="on-handset" (click)="navigateTo('/profile/favourites')" *ngIf="authenticated">
             <fa-icon [icon]="['fas', 'heart']" style="padding-right: 6px;"></fa-icon>
             My Favourites
         </li>
