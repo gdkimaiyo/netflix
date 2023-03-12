@@ -91,4 +91,20 @@ export class MoviesService {
   getShowRecommendations(id: number): Observable<any> {
     return this._http.get(`${this.show}/${id}/recommendations?api_key=${TMDB_API_KEY}&page=1`);
   }
+
+  getFavShows(): Observable<any> {
+    return this.http.get(`${environment.backendApi}/api/v1/shows/favourites`);
+  }
+
+  getFavShowById(id: number): Observable<any> {
+    return this.http.get(`${environment.backendApi}/api/v1/shows/favourites/${id}`);
+  }
+
+  addFavShow(payload: any): Observable<any> {
+    return this.http.post(`${environment.backendApi}/api/v1/shows/favourites`, payload, httpOptions);
+  }
+
+  removeFavShow(id: number, payload: any): Observable<any> {
+    return this.http.post(`${environment.backendApi}/api/v1/shows/favourites/${id}`, payload, httpOptions);
+  }
 }

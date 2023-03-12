@@ -55,9 +55,9 @@
             <nz-tab nzTitle="Shows" (nzClick)="tabClicked()">
                 <div class="" *ngIf="favShows?.length > 0; else emptyList2">
                     <article class="favourite">
-                        <div [ngClass]="loading ? 'card-loading' : 'movie-card'" *ngFor="let favourite of shows"
+                        <div [ngClass]="isLoading ? 'card-loading' : 'movie-card'" *ngFor="let favourite of shows"
                             style="width: 100%; margin-right: 12px;">
-                            <nz-card [nzLoading]="loading">
+                            <nz-card [nzLoading]="isLoading">
                                 <nz-card-meta [nzAvatar]="imageTemplate" [nzTitle]="cardTitle" [nzDescription]="descTemplate">
                                 </nz-card-meta>
                             </nz-card>
