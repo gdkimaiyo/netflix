@@ -15,7 +15,7 @@
             <nz-tab nzTitle="Movies" (nzClick)="tabClicked()">
                 <div class="" *ngIf="favMovies?.length > 0; else emptyList">
                     <article class="favourite">
-                        <div [ngClass]="loading ? '' : 'movie-card'" *ngFor="let favourite of movies"
+                        <div [ngClass]="loading ? 'card-loading' : 'movie-card'" *ngFor="let favourite of movies"
                             style="width: 100%; margin-right: 12px;">
                             <nz-card [nzLoading]="loading">
                                 <nz-card-meta [nzAvatar]="imageTemplate" [nzTitle]="cardTitle" [nzDescription]="descTemplate">
@@ -55,7 +55,7 @@
             <nz-tab nzTitle="Shows" (nzClick)="tabClicked()">
                 <div class="" *ngIf="favShows?.length > 0; else emptyList2">
                     <article class="favourite">
-                        <div [ngClass]="loading ? '' : 'movie-card'" *ngFor="let favourite of shows"
+                        <div [ngClass]="loading ? 'card-loading' : 'movie-card'" *ngFor="let favourite of shows"
                             style="width: 100%; margin-right: 12px;">
                             <nz-card [nzLoading]="loading">
                                 <nz-card-meta [nzAvatar]="imageTemplate" [nzTitle]="cardTitle" [nzDescription]="descTemplate">

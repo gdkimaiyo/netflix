@@ -3,7 +3,9 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTabPosition } from 'ng-zorro-antd/tabs';
+import { UserService } from 'src/app/shared/services/user.service';
 import { StorageService } from 'src/app/shared/services/storage.service';
+import { MoviesService } from 'src/app/shared/services/movies.service';
 import { MONTHS, NOTIFICATION_CODES, FETCH_NEXT_PAGE_ITEMS } from '../../utils/constants';
 
 @Component({
@@ -29,6 +31,8 @@ export class FavouritesComponent implements OnInit {
   constructor(
     private router: Router,
     private location: Location,
+    private userService: UserService,
+    private moviesService: MoviesService,
     private storageService: StorageService,
     private notificationService: NzNotificationService,
   ) { }
@@ -49,12 +53,14 @@ export class FavouritesComponent implements OnInit {
 
       if (element?.release_date?.length > 0) {
         let splits = element.release_date.split("-");
-        let year = splits[0], month = MONTHS[parseInt(splits[1]) - 1], day = parseInt(splits[2]);
-        element.release_date = `${month} ${day}, ${year}`;
+        if (splits?.length > 1) {
+          let year = splits[0], month = MONTHS[parseInt(splits[1]) - 1], day = parseInt(splits[2]);
+          element.release_date = `${month} ${day}, ${year}`;
+        }
       }
     });
 
-    this.favShows = this.getFavourites("shows");;
+    this.favShows = this.getFavourites("shows");
     this.totalShows = (Math.ceil(this.favShows.length / 10)) * 10;
     this.shows = FETCH_NEXT_PAGE_ITEMS(this.favShows, this.page, this.perPage);
     // Populate movie image URL/src
@@ -63,7 +69,47 @@ export class FavouritesComponent implements OnInit {
         `https://image.tmdb.org/t/p/original${element.poster_path}` : this.imageURL;
     });
 
-    this.loading = false;
+    this.moviesService.getFavMovies().subscribe(
+      (res) => {
+        let toSave: any = [];
+        if (res?.data?.length === 0) {
+          toSave = this.favMovies;
+        } else {
+          if (this.favMovies?.length === 0) {
+            localStorage.removeItem("movie_favourites");
+            let favourites: any = [];
+            res?.data?.forEach((element: any) => {
+              favourites.push(element);
+              localStorage.setItem("movie_favourites", JSON.stringify(favourites));
+            });
+          } else {
+            this.favMovies?.forEach((movie: any) => {
+              let isFav = res?.data?.filter((elm: any) => elm?.id === movie?.id);
+              if (isFav?.length === 0) {
+                toSave.push(movie);
+              }
+            });
+          }
+        }
+        toSave?.forEach((movie: any) => {
+          const { title, overview, poster_path, release_date, id } = movie;
+          const payload = { title, overview, poster_path, release_date, id };
+          this.moviesService.addFavMovie(payload).subscribe((res) => {
+            const userProfile = this.storageService.getUser();
+            const action = {
+              userId: userProfile?._id,
+              action: `Added the movie: '${payload.title}' to your favourites list`,
+            };
+            this.userService.saveUserLogs(action).subscribe((result) => {});
+          });
+        });
+        this.loading = false;
+      },
+      (err) => {
+        this.sendNotification('warning', '', 'Unable to fetch your favourites. Check your network connection', this.colorCodes.warning);
+        this.loading = false;
+      },
+    );
   }
 
   getFavourites(category: string) {
@@ -106,13 +152,25 @@ export class FavouritesComponent implements OnInit {
       let favourites = JSON.parse(localStorage.getItem("movie_favourites") || '[]');
       favourites = favourites?.filter((movie:any) => movie?.id !== movieId);
       localStorage.setItem("movie_favourites", JSON.stringify(favourites));
+
+      const toRemove = this.favMovies?.filter((movie: any) => movie?.id === movieId);
+      const { title, overview, poster_path, release_date, id } = toRemove[0];
+      const payload = { title, overview, poster_path, release_date, id };
+      this.moviesService.removeFavMovie(payload?.id, payload).subscribe((res) => {
+        const userProfile = this.storageService.getUser();
+        const action = {
+          userId: userProfile?._id,
+          action: `Removed the movie: '${payload.title}' from your favourites list`,
+        };
+        this.userService.saveUserLogs(action).subscribe((result) => {});
+      });
     } else {
       let favourites = JSON.parse(localStorage.getItem("show_favourites") || '[]');
       favourites = favourites?.filter((show:any) => show?.id !== movieId);
       localStorage.setItem("show_favourites", JSON.stringify(favourites));
     }
 
-    this.sendNotification('success', `${category} removed from favourites`, '', this.colorCodes.success,);
+    this.sendNotification('info', `${category} successfully removed from favourites`, '', this.colorCodes.info);
     this.ngOnInit();
   }
 

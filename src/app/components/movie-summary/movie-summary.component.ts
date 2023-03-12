@@ -1,5 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MoviesService } from 'src/app/shared/services/movies.service';
+import { UserService } from 'src/app/shared/services/user.service';
+import { StorageService } from 'src/app/shared/services/storage.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { NOTIFICATION_CODES } from '../../utils/constants';
 
@@ -10,6 +14,7 @@ import { NOTIFICATION_CODES } from '../../utils/constants';
 })
 export class MovieSummaryComponent implements OnInit {
   $Handset: boolean = false;
+  isAuthenticated: boolean = false;
   rated: any;
   colorCodes = NOTIFICATION_CODES;
   progressFormart = (percent: number): string => `${percent}%`;
@@ -21,6 +26,10 @@ export class MovieSummaryComponent implements OnInit {
   @Input('moreDetails') moreDetails: any;
 
   constructor(
+    public router: Router,
+    private userService: UserService,
+    private moviesService: MoviesService,
+    private storageService: StorageService,
     private breakpointObserver: BreakpointObserver,
     private notificationService: NzNotificationService,
   ) { }
@@ -32,6 +41,7 @@ export class MovieSummaryComponent implements OnInit {
     });
     this.rated = this.moreDetails?.Rated;
     this.isFavourite = this.getFavouriteState(this.selectedMovie?.id);
+    this.isAuthenticated = this.storageService.isLoggedIn() ? true : false;
   }
 
   likeMovie(event: any) {
@@ -54,9 +64,8 @@ export class MovieSummaryComponent implements OnInit {
     if (localStorage.getItem("movie_favourites") && typeof (Storage) !== undefined) {
       const favourites = JSON.parse(localStorage.getItem("movie_favourites") || '[]');
       return (favourites?.filter((movie: any) => movie?.id === movieId)?.length > 0) ? true : false
-    } else {
-      return false;
     }
+    return false;
   }
 
   addFavourite() {
@@ -78,16 +87,34 @@ export class MovieSummaryComponent implements OnInit {
       }
     }
   }
+
   removeFavourite() {
-    let favourites = JSON.parse(localStorage.getItem("movie_favourites") || '[]');
-    favourites = favourites?.filter((movie:any) => movie?.id !== this.selectedMovie?.id)
-    localStorage.setItem("movie_favourites", JSON.stringify(favourites));
-    this.sendNotification('success', 'Movie removed from favourites', '', this.colorCodes.success,);
-    this.isFavourite = false;
+    if (this.storageService.isLoggedIn()) {
+      let favourites = JSON.parse(localStorage.getItem("movie_favourites") || '[]');
+      favourites = favourites?.filter((movie:any) => movie?.id !== this.selectedMovie?.id)
+      localStorage.setItem("movie_favourites", JSON.stringify(favourites));
+      this.sendNotification('info', 'Movie successfully removed from favourites', '', this.colorCodes.info);
+      this.isFavourite = false;
+
+      const { title, overview, poster_path, release_date, id } = this.selectedMovie;
+      const payload = { title, overview, poster_path, release_date, id };
+      this.moviesService.removeFavMovie(payload?.id, payload).subscribe((res) => {
+        const userProfile = this.storageService.getUser();
+        const action = {
+          userId: userProfile?._id,
+          action: `Removed the movie: '${payload.title}' from your favourites list`,
+        };
+        this.userService.saveUserLogs(action).subscribe((result) => {});
+      });
+    }
   }
 
   showMore(): void {
     this.loadMore = !this.loadMore;
+  }
+
+  login(): void {
+    this.router.navigate(['login']);
   }
 
   sendNotification(type: string, title: string, message: string, bgcolor: string): void {
