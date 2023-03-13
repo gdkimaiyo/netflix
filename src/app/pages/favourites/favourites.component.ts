@@ -29,6 +29,8 @@ export class FavouritesComponent implements OnInit {
   perPage: number = 10; // Show 10 favourites per page
   page: number = 1; // Show first page of the favourites
 
+  userProfile: any;
+
   constructor(
     private router: Router,
     private location: Location,
@@ -42,6 +44,9 @@ export class FavouritesComponent implements OnInit {
     if (!this.storageService.isLoggedIn()) {
       this.router.navigate(['/']);
     }
+    
+    this.userProfile = this.storageService.getUser();
+
     this.loading = true;
     this.isLoading = true;
     this.page = 1;
@@ -74,7 +79,7 @@ export class FavouritesComponent implements OnInit {
   }
 
   getRemoteFavMovies() {
-    this.moviesService.getFavMovies().subscribe(
+    this.moviesService.getFavMovies(this.userProfile?._id).subscribe(
       (res) => {
         let toSave: any = [];
         if (res?.data?.length === 0) {
@@ -98,11 +103,10 @@ export class FavouritesComponent implements OnInit {
         }
         toSave?.forEach((movie: any) => {
           const { title, overview, poster_path, release_date, id } = movie;
-          const payload = { title, overview, poster_path, release_date, id };
+          const payload = { title, overview, poster_path, release_date, id, userId: this.userProfile?._id };
           this.moviesService.addFavMovie(payload).subscribe((res) => {
-            const userProfile = this.storageService.getUser();
             const action = {
-              userId: userProfile?._id,
+              userId: this.userProfile?._id,
               action: `Added the movie: '${payload.title}' to your favourites list`,
             };
             this.userService.saveUserLogs(action).subscribe((result) => {});
@@ -118,7 +122,7 @@ export class FavouritesComponent implements OnInit {
   }
 
   getFavouriteShows() {
-    this.moviesService.getFavShows().subscribe(
+    this.moviesService.getFavShows(this.userProfile?._id).subscribe(
       (res) => {
         this.favShows = res?.data;
         this.totalShows = (Math.ceil(this.favShows.length / 10)) * 10;
@@ -164,11 +168,10 @@ export class FavouritesComponent implements OnInit {
 
       const toRemove = this.favMovies?.filter((movie: any) => movie?.id === movieId);
       const { title, overview, poster_path, release_date, id } = toRemove[0];
-      const payload = { title, overview, poster_path, release_date, id };
+      const payload = { title, overview, poster_path, release_date, id, userId: this.userProfile?._id };
       this.moviesService.removeFavMovie(payload?.id, payload).subscribe((res) => {
-        const userProfile = this.storageService.getUser();
         const action = {
-          userId: userProfile?._id,
+          userId: this.userProfile?._id,
           action: `Removed the movie: '${payload.title}' from your favourites list`,
         };
         this.userService.saveUserLogs(action).subscribe((result) => {});
@@ -176,11 +179,10 @@ export class FavouritesComponent implements OnInit {
     } else {
       const toRemove = this.favShows?.filter((show: any) => show?.id === movieId);
       const { name, overview, poster_path, first_air_date, id } = toRemove[0];
-      const payload = { name, overview, poster_path, first_air_date, id };
+      const payload = { name, overview, poster_path, first_air_date, id, userId: this.userProfile?._id };
       this.moviesService.removeFavShow(payload?.id, payload).subscribe((res) => {
-        const userProfile = this.storageService.getUser();
         const action = {
-          userId: userProfile?._id,
+          userId: this.userProfile?._id,
           action: `Removed the show: '${payload.name}' from your favourites list`,
         };
         this.userService.saveUserLogs(action).subscribe((result) => {});

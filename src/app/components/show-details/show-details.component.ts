@@ -30,6 +30,8 @@ export class ShowDetailsComponent implements OnInit {
   imageURL = "https://dummyimage.com/300x300/000/fff&text=Loading+Image+...";
   logoURL = "https://image.tmdb.org/t/p/original";
 
+  userProfile: any;
+
   recommendShows: any = [];
   progressFormart = (percent: number): string => `${percent}%`;
   
@@ -60,6 +62,7 @@ export class ShowDetailsComponent implements OnInit {
       this.$Handset = (state.matches) ? false : true;
     });
     this.isAuthenticated = this.storageService.isLoggedIn() ? true : false;
+    this.userProfile = this.storageService.getUser();
     
     if (id) {
       this.getShowById(id);
@@ -121,8 +124,7 @@ export class ShowDetailsComponent implements OnInit {
       this.sendNotification('warning', '', 'Unable to add show to favourites list.', this.colorCodes.warning,);
       return;
     }
-    
-    // Local Storage
+
     if (!this.isFavourite) {
       this.addFavourite();
     } else {
@@ -132,21 +134,22 @@ export class ShowDetailsComponent implements OnInit {
   }
 
   getFavouriteState(showId: number) {
-    this.moviesService.getFavShowById(showId).subscribe((res) => {
-      this.isFavourite = (res?.data) ? true : false;
-    }, (err) => {
-      console.log(err);
-    });
+    if (this.isAuthenticated) {
+      this.moviesService.getFavShowById(showId).subscribe((res) => {
+        this.isFavourite = (res?.data && res?.data?.userId === this.userProfile?._id) ? true : false;
+      }, (err) => {
+        console.log(err);
+      });
+    }
   }
 
   addFavourite() {
     const { name, overview, poster_path, first_air_date, id } = this.selectedShow;
-    const payload = { name, overview, poster_path, first_air_date, id };
+    const payload = { name, overview, poster_path, first_air_date, id, userId: this.userProfile?._id };
     this.moviesService.addFavShow(payload).subscribe((res) => {
       this.sendNotification('success', '', 'TV Show successfully added to your favourites list', this.colorCodes.success);
-      const userProfile = this.storageService.getUser();
       const action = {
-        userId: userProfile?._id,
+        userId: this.userProfile?._id,
         action: `Added the tv show: '${payload.name}' to your favourites list`,
       };
       this.userService.saveUserLogs(action).subscribe((result) => {});
@@ -162,12 +165,11 @@ export class ShowDetailsComponent implements OnInit {
 
   removeFavourite() {
     const { name, overview, poster_path, first_air_date, id } = this.selectedShow;
-    const payload = { name, overview, poster_path, first_air_date, id };
+    const payload = { name, overview, poster_path, first_air_date, id, userId: this.userProfile?._id };
     this.moviesService.removeFavShow(payload?.id, payload).subscribe((res) => {
       this.sendNotification('info', `TV Show successfully removed from your favourites`, '', this.colorCodes.info);
-      const userProfile = this.storageService.getUser();
       const action = {
-        userId: userProfile?._id,
+        userId: this.userProfile?._id,
         action: `Removed the show: '${payload.name}' from your favourites list`,
       };
       this.userService.saveUserLogs(action).subscribe((result) => {});
