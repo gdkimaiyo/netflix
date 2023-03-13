@@ -96,10 +96,10 @@ export class MovieSummaryComponent implements OnInit {
       this.sendNotification('info', 'Movie successfully removed from favourites', '', this.colorCodes.info);
       this.isFavourite = false;
 
+      const userProfile = this.storageService.getUser();
       const { title, overview, poster_path, release_date, id } = this.selectedMovie;
-      const payload = { title, overview, poster_path, release_date, id };
+      const payload = { title, overview, poster_path, release_date, id, userId: userProfile?._id };
       this.moviesService.removeFavMovie(payload?.id, payload).subscribe((res) => {
-        const userProfile = this.storageService.getUser();
         const action = {
           userId: userProfile?._id,
           action: `Removed the movie: '${payload.title}' from your favourites list`,

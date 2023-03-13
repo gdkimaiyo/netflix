@@ -55,8 +55,8 @@ export class MoviesService {
     return this._http.get(`${this.OMDb}/?apikey=${OMDB_API}&i=${id}`);
   }
 
-  getFavMovies(): Observable<any> {
-    return this.http.get(`${environment.backendApi}/api/v1/movies/favourites`);
+  getFavMovies(userId: string): Observable<any> {
+    return this.http.get(`${environment.backendApi}/api/v1/movies/user/favourites/${userId}`);
   }
 
   getFavMovieById(id: number): Observable<any> {
@@ -92,8 +92,8 @@ export class MoviesService {
     return this._http.get(`${this.show}/${id}/recommendations?api_key=${TMDB_API_KEY}&page=1`);
   }
 
-  getFavShows(): Observable<any> {
-    return this.http.get(`${environment.backendApi}/api/v1/shows/favourites`);
+  getFavShows(userId: string): Observable<any> {
+    return this.http.get(`${environment.backendApi}/api/v1/shows/user/favourites/${userId}`);
   }
 
   getFavShowById(id: number): Observable<any> {
