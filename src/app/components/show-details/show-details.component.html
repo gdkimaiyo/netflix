@@ -107,7 +107,15 @@
                             </nz-progress>
                         </div>
                         <div class="user-score">
-                            <div class="like-show">
+                            <div class="like-show" *ngIf="!isAuthenticated">
+                                <a nz-button nzType="link" nz-popconfirm nzOkText="Login" (nzOnConfirm)="login()"
+                                    nzPopconfirmTitle="Login to add a TV Show to your favourites" nzPopconfirmPlacement="top">
+                                    <fa-icon class="heart-icon" nz-tooltip nzTooltipTitle="{{$Handset ? '' : 'Like show'}}"
+                                        nzTooltipColor="#d12e26" [icon]="['fas', 'heart']">
+                                    </fa-icon>
+                                </a>
+                            </div>
+                            <div class="like-show" *ngIf="isAuthenticated">
                                 <fa-icon id="{{selectedShow?.id}}" class="heart-icon" [ngClass]="isFavourite ? 'liked' : ''" nz-tooltip
                                     nzTooltipTitle="{{$Handset ? '' : (isFavourite ? 'Unlike show' : 'Like show')}}" nzTooltipColor="#d12e26"
                                     [icon]="['fas', 'heart']" (click)="likeShow($event)"></fa-icon>

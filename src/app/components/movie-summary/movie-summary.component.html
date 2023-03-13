@@ -60,10 +60,23 @@
             <span id="onHandset" class="rating">User Score</span>
         </div>
         <div class="user-score">
-            <div class="like-movie">
+            <div class="like-movie" *ngIf="!isAuthenticated">
+                <fa-icon *ngIf="!isFavourite" id="{{selectedMovie?.id}}" class="heart-icon" nz-tooltip
+                    nzTooltipTitle="{{$Handset ? '' : 'Like movie'}}" nzTooltipColor="#d12e26" [icon]="['fas', 'heart']"
+                    (click)="likeMovie($event)">
+                </fa-icon>
+                <a nz-button nzType="link" nz-popconfirm nzOkText="Login" (nzOnConfirm)="login()"
+                    nzPopconfirmTitle="Login to remove a movie from your favourites" nzPopconfirmPlacement="top">
+                    <fa-icon *ngIf="isFavourite" id="{{selectedMovie?.id}}" class="heart-icon liked" nz-tooltip
+                        nzTooltipTitle="{{$Handset ? '' : 'Unlike movie'}}" nzTooltipColor="#d12e26"
+                        [icon]="['fas', 'heart']">
+                    </fa-icon>
+                </a>
+            </div>
+            <div class="like-movie" *ngIf="isAuthenticated">
                 <fa-icon id="{{selectedMovie?.id}}" class="heart-icon" [ngClass]="isFavourite ? 'liked' : ''" nz-tooltip
-                    nzTooltipTitle="{{$Handset ? '' : (isFavourite ? 'Unlike movie' : 'Like movie')}}" nzTooltipColor="#d12e26"
-                    [icon]="['fas', 'heart']" (click)="likeMovie($event)"></fa-icon>
+                    nzTooltipTitle="{{$Handset ? '' : (isFavourite ? 'Unlike movie' : 'Like movie')}}"
+                    nzTooltipColor="#d12e26" [icon]="['fas', 'heart']" (click)="likeMovie($event)"></fa-icon>
             </div>
         </div>
         <div class="user-score" *ngIf="selectedMovie?.homepage && selectedMovie?.homepage !== ''">

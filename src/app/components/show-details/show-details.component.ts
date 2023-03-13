@@ -4,7 +4,9 @@ import { NzButtonSize } from 'ng-zorro-antd/button';
 import { Location } from '@angular/common';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { UserService } from 'src/app/shared/services/user.service';
 import { MoviesService } from 'src/app/shared/services/movies.service';
+import { StorageService } from 'src/app/shared/services/storage.service';
 import { MONTHS, MONTHS_SHORT, NOTIFICATION_CODES } from '../../utils/constants';
 
 @Component({
@@ -13,6 +15,7 @@ import { MONTHS, MONTHS_SHORT, NOTIFICATION_CODES } from '../../utils/constants'
   styleUrls: ['./show-details.component.scss']
 })
 export class ShowDetailsComponent implements OnInit {
+  isAuthenticated: boolean = false;
   isLoading: boolean = false;
   isProcessing: boolean = false;
   $Handset: boolean = false;
@@ -27,6 +30,8 @@ export class ShowDetailsComponent implements OnInit {
   imageURL = "https://dummyimage.com/300x300/000/fff&text=Loading+Image+...";
   logoURL = "https://image.tmdb.org/t/p/original";
 
+  userProfile: any;
+
   recommendShows: any = [];
   progressFormart = (percent: number): string => `${percent}%`;
   
@@ -36,7 +41,9 @@ export class ShowDetailsComponent implements OnInit {
     private router: Router,
     private location: Location,
     private route: ActivatedRoute,
+    private userService: UserService,
     private moviesService: MoviesService,
+    private storageService: StorageService,
     private breakpointObserver: BreakpointObserver,
     private notificationService: NzNotificationService,
   ) { }
@@ -54,10 +61,12 @@ export class ShowDetailsComponent implements OnInit {
     this.breakpointObserver.observe(['(min-width: 575px)']).subscribe((state: BreakpointState) => {
       this.$Handset = (state.matches) ? false : true;
     });
+    this.isAuthenticated = this.storageService.isLoggedIn() ? true : false;
+    this.userProfile = this.storageService.getUser();
     
     if (id) {
       this.getShowById(id);
-      this.isFavourite = this.getFavouriteState(id);
+       this.getFavouriteState(id);
       // Get Movie Recommendations
       this.getRecommendations(id);
     } else {
@@ -115,8 +124,7 @@ export class ShowDetailsComponent implements OnInit {
       this.sendNotification('warning', '', 'Unable to add show to favourites list.', this.colorCodes.warning,);
       return;
     }
-    
-    // Local Storage
+
     if (!this.isFavourite) {
       this.addFavourite();
     } else {
@@ -126,41 +134,53 @@ export class ShowDetailsComponent implements OnInit {
   }
 
   getFavouriteState(showId: number) {
-    // Check localStorage if current show is already in favourites list
-    if (localStorage.getItem("show_favourites") && typeof (Storage) !== undefined) {
-      const favourites = JSON.parse(localStorage.getItem("show_favourites") || '[]');
-      return (favourites?.filter((show: any) => show?.id === showId)?.length > 0) ? true : false
-    } else {
-      return false;
+    if (this.isAuthenticated) {
+      this.moviesService.getFavShowById(showId).subscribe((res) => {
+        this.isFavourite = (res?.data && res?.data?.userId === this.userProfile?._id) ? true : false;
+      }, (err) => {
+        console.log(err);
+      });
     }
   }
 
   addFavourite() {
-    if (localStorage.getItem("show_favourites") && typeof (Storage) !== undefined) {
-      const favourites = JSON.parse(localStorage.getItem("show_favourites") || '[]');
-      favourites.push(this.selectedShow);
-      localStorage.setItem("show_favourites", JSON.stringify(favourites));
-      this.sendNotification('success', 'Show added to favourites', '', this.colorCodes.success,);
+    const { name, overview, poster_path, first_air_date, id } = this.selectedShow;
+    const payload = { name, overview, poster_path, first_air_date, id, userId: this.userProfile?._id };
+    this.moviesService.addFavShow(payload).subscribe((res) => {
+      this.sendNotification('success', '', 'TV Show successfully added to your favourites list', this.colorCodes.success);
+      const action = {
+        userId: this.userProfile?._id,
+        action: `Added the tv show: '${payload.name}' to your favourites list`,
+      };
+      this.userService.saveUserLogs(action).subscribe((result) => {});
       this.isFavourite = true;
-    } else {
-      if (typeof (Storage) !== undefined) {
-        const favourites = [];
-        favourites.push(this.selectedShow);
-        localStorage.setItem("show_favourites", JSON.stringify(favourites));
-        this.sendNotification('success', 'Show added to favourites', '', this.colorCodes.success,);
-        this.isFavourite = true;
-      } else {
-        this.sendNotification('warning', '', 'Unable to add Show to favourites list.', this.colorCodes.warning,);
-      }
-    }
+    }, (err) => {
+      this.sendNotification(
+        'warning', '', 
+        'Unable to add show to favourites list. Check your network connection',
+        this.colorCodes.warning,
+      );
+    });
   }
 
   removeFavourite() {
-    let favourites = JSON.parse(localStorage.getItem("show_favourites") || '[]');
-    favourites = favourites?.filter((show:any) => show?.id !== this.selectedShow?.id)
-    localStorage.setItem("show_favourites", JSON.stringify(favourites));
-    this.sendNotification('success', 'Show removed from favourites', '', this.colorCodes.success,);
-    this.isFavourite = false;
+    const { name, overview, poster_path, first_air_date, id } = this.selectedShow;
+    const payload = { name, overview, poster_path, first_air_date, id, userId: this.userProfile?._id };
+    this.moviesService.removeFavShow(payload?.id, payload).subscribe((res) => {
+      this.sendNotification('info', `TV Show successfully removed from your favourites`, '', this.colorCodes.info);
+      const action = {
+        userId: this.userProfile?._id,
+        action: `Removed the show: '${payload.name}' from your favourites list`,
+      };
+      this.userService.saveUserLogs(action).subscribe((result) => {});
+      this.isFavourite = false;
+    }, (err) => {
+      this.sendNotification(
+        'warning', 'Failed!', 
+        'Unable to remove the show from favourites list. Check your network connection',
+        this.colorCodes.warning,
+      );
+    });
   }
 
   getRecommendations(id: number): void {
@@ -192,19 +212,10 @@ export class ShowDetailsComponent implements OnInit {
     });
   }
 
-  sendNotification(type: string, title: string, message: string, bgcolor: string): void {
-    this.notificationService.create(type, title, message, {
-      nzClass: 'notification',
-      nzDuration: 5000,
-      nzStyle: {
-        backgroundColor: bgcolor,
-        fontWeight: 500,
-      },
-      nzKey: 'toastmsg',
-      nzPlacement: 'topRight',
-    });
+  login(): void {
+    this.router.navigate(['login']);
   }
-
+  
   showBackdrop():void {
     this.displayBackdrop = !this.displayBackdrop;
     window.scrollTo(0,0);
@@ -216,6 +227,19 @@ export class ShowDetailsComponent implements OnInit {
 
   showMore(): void {
     this.loadMore = !this.loadMore;
+  }
+
+  sendNotification(type: string, title: string, message: string, bgcolor: string): void {
+    this.notificationService.create(type, title, message, {
+      nzClass: 'notification',
+      nzDuration: 5000,
+      nzStyle: {
+        backgroundColor: bgcolor,
+        fontWeight: 500,
+      },
+      nzKey: 'toastmsg',
+      nzPlacement: 'topRight',
+    });
   }
 
   // HELPER FUNCTIONS

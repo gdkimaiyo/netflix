@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpBackend, HttpClient } from '@angular/common/http';
+import { HttpBackend, HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 import { TMDB_API_KEY, OMDB_API } from 'src/secrets.config';
+
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +27,8 @@ export class MoviesService {
   // without going through the interceptor chain.
   private _http: HttpClient;
 
-  constructor(private http: HttpBackend) {
-    this._http = new HttpClient(http);
+  constructor(private http: HttpClient, private http2: HttpBackend) {
+    this._http = new HttpClient(http2);
   }
 
   /**
@@ -50,6 +55,22 @@ export class MoviesService {
     return this._http.get(`${this.OMDb}/?apikey=${OMDB_API}&i=${id}`);
   }
 
+  getFavMovies(userId: string): Observable<any> {
+    return this.http.get(`${environment.backendApi}/api/v1/movies/user/favourites/${userId}`);
+  }
+
+  getFavMovieById(id: number): Observable<any> {
+    return this.http.get(`${environment.backendApi}/api/v1/movies/favourites/${id}`);
+  }
+
+  addFavMovie(payload: any): Observable<any> {
+    return this.http.post(`${environment.backendApi}/api/v1/movies/favourites`, payload, httpOptions);
+  }
+
+  removeFavMovie(id: number, payload: any): Observable<any> {
+    return this.http.post(`${environment.backendApi}/api/v1/movies/favourites/${id}`, payload, httpOptions);
+  }
+
   /**
    * TV Shows
    */
@@ -69,5 +90,21 @@ export class MoviesService {
 
   getShowRecommendations(id: number): Observable<any> {
     return this._http.get(`${this.show}/${id}/recommendations?api_key=${TMDB_API_KEY}&page=1`);
+  }
+
+  getFavShows(userId: string): Observable<any> {
+    return this.http.get(`${environment.backendApi}/api/v1/shows/user/favourites/${userId}`);
+  }
+
+  getFavShowById(id: number): Observable<any> {
+    return this.http.get(`${environment.backendApi}/api/v1/shows/favourites/${id}`);
+  }
+
+  addFavShow(payload: any): Observable<any> {
+    return this.http.post(`${environment.backendApi}/api/v1/shows/favourites`, payload, httpOptions);
+  }
+
+  removeFavShow(id: number, payload: any): Observable<any> {
+    return this.http.post(`${environment.backendApi}/api/v1/shows/favourites/${id}`, payload, httpOptions);
   }
 }
