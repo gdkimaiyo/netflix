@@ -3,7 +3,7 @@
 .section {
   width: 100%;
   margin: 0 auto;
-  max-width: 1024px;
+  max-width: 1160px;
   display: flex;
   flex-direction: row;
   margin-bottom: 3%;
@@ -78,11 +78,17 @@
   background-color: rgba(209, 46, 38);
   font-size: 16px;
   @include respond-to(handhelds) {
-    text-align: center !important;
     font-size: 14px;
   }
 }
 .browse-button:hover {
   background-color: rgba(209, 46, 38);
   border: rgba(209, 46, 38);
+}
+
+.browse-button2 {
+  font-size: 16px;
+  @include respond-to(handhelds) {
+    font-size: 14px;
+  }
 }

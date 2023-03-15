@@ -25,6 +25,7 @@ import { SignupComponent } from './pages/signup/signup.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { RegisterFormComponent } from './components/register-form/register-form.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { PreviewComponent } from './components/preview/preview.component';
 
 registerLocaleData(en);
 
@@ -43,7 +44,8 @@ registerLocaleData(en);
     SignupComponent,
     LoginFormComponent,
     RegisterFormComponent,
-    ProfileComponent
+    ProfileComponent,
+    PreviewComponent
   ],
   imports: [
     BrowserModule,
