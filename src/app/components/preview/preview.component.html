@@ -1,0 +1,55 @@
+<section class="section">
+    <article class="preview" *ngIf="isLoading">
+        <h2 nz-typography class="preview-title">Popular</h2>
+        <div class="all-list">
+            <div class="movie-card" *ngFor="let index of dummy">
+                <nz-card nzHoverable [nzCover]="coverTemplate" [nzActions]="[movieDetails]">
+                    <nz-card-meta [nzDescription]="movieDesc">
+                    </nz-card-meta>
+                </nz-card>
+                <ng-template #movieDesc>
+                    <nz-spin [nzSpinning]="isLoading" style="text-align: center;" nzSimple></nz-spin>
+                </ng-template>
+                <ng-template #coverTemplate>
+                    <nz-spin [nzSpinning]="isLoading">
+                        <img alt="dummy image" src="{{imageURL}}" />
+                    </nz-spin>
+                </ng-template>
+                <ng-template #movieDetails></ng-template>
+            </div>
+        </div>
+    </article>
+
+    <article class="preview" *ngIf="!isLoading">
+        <h2 nz-typography class="preview-title">{{ popular?.title }}</h2>
+        <div class="all-list">
+            <div class="movie-card" *ngFor="let movie of popular?.data">
+                <nz-card nzHoverable [nzCover]="coverTemplate" [nzActions]="[movieDetails]">
+                    <nz-card-meta [nzDescription]="movieDesc">
+                    </nz-card-meta>
+                </nz-card>
+                <ng-template #movieDesc>
+                    <div id="{{movie?.id}}" class="movie-title" (click)="showMovieDetails($event, popular?.title)">
+                        {{movie?.title}}
+                    </div>
+                    <div class="movie-score">
+                        <nz-progress nzType="circle" [nzPercent]="movie.vote_average" [nzWidth]="38" [nzStrokeWidth]="7"
+                            [nzFormat]="progressFormart"
+                            [nzStrokeColor]="(movie.vote_average<=64)? { '50%': '#f3f705'}:{ '100%': '#63cd82' }">
+                        </nz-progress>
+                    </div>
+                </ng-template>
+                <ng-template #coverTemplate>
+                    <img id="{{movie?.id}}" alt="{{movie?.title}}" src="{{movie.poster_path}}"
+                        (click)="showMovieDetails($event, popular?.title)" />
+                </ng-template>
+                <ng-template #movieDetails>
+                    <span id="{{movie?.id}}" class="card-action"
+                        (click)="showMovieDetails($event, popular?.title)">
+                        {{ movie?.release_date }}
+                    </span>
+                </ng-template>
+            </div>
+        </div>
+    </article>
+</section>

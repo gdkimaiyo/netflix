@@ -1,0 +1,155 @@
+@import '../../../global.scss';
+
+.section {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 3%;
+
+  @include respond-to(handhelds) {
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 10%;
+  }
+}
+.preview {
+  width: 100%;
+  max-width: 100%;
+  padding: 24px 16px;
+  margin-top: 12px;
+  align-content: center;
+  flex-grow: 1;
+  text-align: left;
+  @include respond-to(handhelds) {
+    padding: 16px;
+    margin: 0;
+  }
+}
+
+.preview-title {
+  color: rgb(255, 255, 255);
+  font-size: 38px;
+  padding-bottom: 12px;
+  @include respond-to(handhelds) {
+    font-size: 22px;
+  }
+}
+
+.all-list {
+  overflow: auto;
+  white-space: nowrap;
+  padding-bottom: 1%;
+
+  @include respond-to(handhelds) {
+    padding-bottom: 3%;
+  }
+}
+
+.all-list .movie-card {
+  display: inline-block;
+  width: 17%;
+  max-width: 17%;
+  margin-right: 20px;
+  margin-bottom: 18px;
+  text-align: center;
+
+  ::ng-deep .ant-card-body {
+    padding: 12px;
+    padding-bottom: 2px;
+    margin: 0;
+  }
+  ::ng-deep .ant-card {
+    height: 275px;
+  }
+  // ng-deep css within movie-card for css properties to be within this page ONLY
+  ::ng-deep .ant-card-meta-description {
+    text-align: left;
+  }
+  ::ng-deep .ant-card-actions {
+    border-top: none;
+  }
+  ::ng-deep .ant-card-actions>li {
+    margin: 0;
+    margin-bottom: 8px;
+    margin-left: 12px;
+    text-align: left;
+  }
+  ::ng-deep .ant-card-actions>li>span:hover,
+  ::ng-deep .ant-card-actions>li>span:first-child:hover {
+    color: rgba(0, 0, 0, 0.45);
+  }
+
+  ::ng-deep .ant-progress {
+    margin-right: 8px;
+    margin-bottom: 4px;
+    background-color: #0e243f;
+    padding: 4px;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+  }
+  ::ng-deep .ant-progress:hover {
+    font-weight: bold;
+  }
+  ::ng-deep .ant-progress-circle .ant-progress-text,
+  ::ng-deep .ant-progress-circle.ant-progress-status-success .ant-progress-text {
+    color: #ffffff;
+  }
+
+  ::ng-deep .ant-card-cover {
+    background-color: rgba(0, 0, 0);
+  }
+
+  img {
+    width: 100%;
+    height: 200px;
+  }
+
+  @include respond-to(handhelds) {
+    width: 45%;
+    max-width: 45%;
+    margin-right: 12px;
+    ::ng-deep .ant-card {
+      height: 226px;
+    }
+    img {
+      height: 150px;
+    }
+  }
+  @include respond-to(medium-screens) {
+    width: 28%;
+    max-width: 28%;
+  }
+}
+
+.movie-title {
+  margin-top: 4px;
+  font-size: 17px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.65);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  @include respond-to(handhelds) {
+    margin-top: 6px;
+  }
+}
+.movie-title:hover {
+  color: rgba(209, 46, 38, 0.8);
+}
+.card-action {
+  font-size: 18px;
+}
+.movie-score {
+  bottom: 50px;
+  right: 8px;
+  position: absolute;
+  @include respond-to(handhelds) {
+    right: 4px;
+    bottom: 55px;
+  }
+}
