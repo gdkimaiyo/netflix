@@ -115,7 +115,9 @@ export class FavouritesComponent implements OnInit {
         this.loading = false;
       },
       (err) => {
-        this.sendNotification('warning', '', 'Unable to fetch your movie favourites. Check your network connection', this.colorCodes.warning);
+        if (this.storageService.isLoggedIn()) {
+          this.sendNotification('warning', '', 'Unable to fetch your movie favourites. Check your network connection', this.colorCodes.warning);
+        }
         this.loading = false;
       },
     );
@@ -135,7 +137,9 @@ export class FavouritesComponent implements OnInit {
         this.isLoading = false;
       },
       (err) => {
-        this.sendNotification('warning', '', 'Unable to fetch your tv show favourites. Check your network connection', this.colorCodes.warning);
+        if (this.storageService.isLoggedIn()) {
+          this.sendNotification('warning', '', 'Unable to fetch your tv show favourites. Check your network connection', this.colorCodes.warning);
+        }
         this.isLoading = false;
       },
     );
