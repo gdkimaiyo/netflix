@@ -6,12 +6,17 @@
     <section class="section">
         <article class="landing-info">
             <h1 nz-typography class="main-header">Unlimited movies and TV Shows.</h1>
-            <p nz-typography class="sub-header">Browse for movies and add movies you like to your favourites list.</p>
+            <p nz-typography class="sub-header">A wide range of movies and TV shows to explore. Start browsing now.</p>
             <nz-divider></nz-divider>
-            <button id="onDesktop" routerLink="/movies" nz-button nzDanger nzType="primary" [nzSize]="size"
-                class="browse-button">
-                Browse Movies
-            </button>
+            <div class="" style="display: flex; flex-direction: row;">
+                <button id="onDesktop" routerLink="/movies" nz-button nzDanger nzType="primary" [nzSize]="size"
+                    class="browse-button">
+                    Explore Movies
+                </button>
+                <button id="onDesktop" routerLink="/shows" nz-button nzDanger nzType="link" [nzSize]="size">
+                    Explore TV Shows
+                </button>
+            </div>
         </article>
         <article class="random-movie">
             <nz-card nzHoverable [nzCover]="coverTemplate" [nzActions]="[movieTitle]">
@@ -38,20 +43,28 @@
 
             <div id="onHandset" style="margin-top: 24px;">
                 <button routerLink="/movies" nz-button nzDanger nzType="primary" [nzSize]="size" class="browse-button">
-                    Browse Movies
+                    Explore Movies
+                </button>
+                <button routerLink="/shows" nz-button nzDanger nzType="link" [nzSize]="size">
+                    Explore TV Shows
                 </button>
             </div>
         </article>
     </section>
+    <div class="section-divider"></div>
+    <app-preview [popular]="popularMovies" [isLoading]="isFetchingMovies"></app-preview>
+    <div class="section-divider"></div>
+
+    <app-preview [popular]="popularShows" [isLoading]="isFetchingShows"></app-preview>
     <div class="section-divider"></div>
     <section class="section">
         <article class="like-gif">
             <fa-icon class="heart-icon" [icon]="['fas', 'heart']"></fa-icon>
         </article>
         <article class="favourites-info">
-            <h2 nz-typography class="second-header">Add movies to your favourites list</h2>
+            <h2 nz-typography class="second-header">Add movies or TV shows to your favourites list</h2>
             <p nz-typography class="sub-second-header">
-                Save your favourites movies and quickly access them in the favourites page.</p>
+                Save your favourites movies or TV shows and quickly access them in the favourites page.</p>
         </article>
     </section>
     <div class="section-divider"></div>
