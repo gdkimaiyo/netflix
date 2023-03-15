@@ -4,7 +4,7 @@ import { NzButtonSize } from 'ng-zorro-antd/button';
 // import { UserService } from 'src/app/shared/services/user.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MoviesService } from 'src/app/shared/services/movies.service';
-import { NOTIFICATION_CODES } from '../../utils/constants';
+import { MONTHS, NOTIFICATION_CODES } from '../../utils/constants';
 
 @Component({
   selector: 'app-home',
@@ -13,9 +13,13 @@ import { NOTIFICATION_CODES } from '../../utils/constants';
 })
 export class HomeComponent implements OnInit {
   isLoading: boolean = false;
+  isFetchingMovies: boolean = false;
+  isFetchingShows: boolean = false;
   size: NzButtonSize = 'large';
   page: number = 1; // Movies page number. Default page 1 out of 500
   randomMovie: any = {};
+  popularMovies: any;
+  popularShows: any;
   imageURL = "https://dummyimage.com/300x300/000/fff&text=Loading+Image+...";
   // imageURL: string = "assets/images/dave-hoefler-lsoogGC_5dg-unsplash.jpg";
 
@@ -32,6 +36,8 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllMovies();
+    this.getPopularMovies();
+    this.getPopularShows();
     
     // this.userService.getUsers().subscribe((res) => {
     //   console.log("ALL USERS");
@@ -84,6 +90,55 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  getPopularMovies(): void {
+    this.isFetchingMovies = true;
+    this.moviesService.getMovies(1).subscribe((res) => {
+      // Populate movie image URL/src and Format date
+      res?.results?.forEach((element: any) => {
+        element.vote_average = element?.vote_average ? Math.round(element?.vote_average * 10) : 0;
+        element.release_date = this.formartDate(element?.release_date);
+        element.poster_path = element?.poster_path !== null ?
+          `https://image.tmdb.org/t/p/original${element.poster_path}` : this.imageURL;
+      });
+      this.popularMovies = { data: res?.results, title: "Popular Movies" };
+      this.isFetchingMovies = false;
+    },
+    (error) => {
+      this.sendNotification(
+        'warning',
+        'Error',
+        error.error.message ? error.error.message : 'An error occured while fetching popular movies',
+        this.colorCodes.warning,
+      );
+      this.isFetchingMovies = false;
+    });
+  }
+
+  getPopularShows(): void {
+    this.isFetchingShows = true;
+    this.moviesService.getShows(1).subscribe((res) => {
+      // Populate show image URL/src
+      res?.results?.forEach((element: any) => {
+        element.title = element?.name;
+        element.vote_average = element?.vote_average ? Math.round(element?.vote_average * 10) : 0;
+        element.release_date = this.formartDate(element?.first_air_date);
+        element.poster_path = element?.poster_path !== null ?
+          `https://image.tmdb.org/t/p/original${element.poster_path}` : this.imageURL;
+      });
+      this.popularShows = { data: res?.results, title: "Popular TV Shows" };
+      this.isFetchingShows = false;
+    },
+    (error) => {
+      this.sendNotification(
+        'warning',
+        'Error',
+        error.error.message ? error.error.message : 'An error occured while fetching popular tv shows',
+        this.colorCodes.warning,
+      );
+      this.isFetchingShows = false;
+    });
+  }
+
   sendNotification(type: string, title: string, message: string, bgcolor: string): void {
     this.notificationService.create(type, title, message, {
       nzClass: 'notification',
@@ -100,5 +155,16 @@ export class HomeComponent implements OnInit {
   // HELPER FUNCTIONS
   randomNumber(min: number, max: number) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  formartDate(date: string) {
+    if (date?.length > 0) {
+      let splits = date.split("-");
+      if (splits?.length > 1) {
+        let year = splits[0], month = MONTHS[parseInt(splits[1]) - 1], day = parseInt(splits[2]);
+        return `${month} ${day}, ${year}`;
+      }
+    }
+    return "January, 2001"; // Fallback date
   }
 }
