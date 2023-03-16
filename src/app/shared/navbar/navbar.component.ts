@@ -40,7 +40,13 @@ export class NavbarComponent implements OnInit {
   }
 
   navigateTo(name: string = ''): void {
-    this.router.navigate([name]);
+    if (name === '/profile') {
+      this.router.navigate([name]).then(() => {
+        window.location.reload();
+      });
+    } else {
+      this.router.navigate([name]);
+    }
   }
 
   logout(): void {
