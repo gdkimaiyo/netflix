@@ -1,0 +1,24 @@
+@import '../../../global.scss';
+
+.content {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+.form {
+  width: 100%;
+}
+
+.form-label {
+  color: #ffffff;
+  margin-top: 0;
+  padding-bottom: 0;
+}
+
+.submit-btn {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  border-radius: 16px;
+  color: #ffffff;
+  background-color: #d12e26;
+  border: none;
+}

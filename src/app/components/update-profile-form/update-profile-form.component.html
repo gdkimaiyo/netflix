@@ -1,0 +1,49 @@
+<div class="content">
+    <form nz-form [formGroup]="form" class="form" (ngSubmit)="onSubmit(form.value)">
+        <p class="form-label">Your First Name</p>
+        <nz-form-item>
+            <nz-form-control [nzErrorTip]="firstErrorTpl">
+                <nz-input-group>
+                    <input class="input" type="text" nz-input formControlName="firstname" placeholder="First Name" />
+                </nz-input-group>
+                <ng-template #firstErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">First name is required!</ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <p class="form-label">Your Last Name</p>
+        <nz-form-item>
+            <nz-form-control [nzErrorTip]="lastErrorTpl">
+                <nz-input-group>
+                    <input class="input" type="text" nz-input formControlName="lastname" placeholder="Last Name" />
+                </nz-input-group>
+                <ng-template #lastErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">Last name is required!</ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <p nz-typography style="display: none;">
+            <button nz-button nzType="primary" class="submit-btn" [disabled]="!form.valid"
+                [nzLoading]="isLoading">
+                Submit
+            </button>
+        </p>
+    </form>
+
+    <p class="form-label">Your Email Address</p>
+    <nz-form-item>
+        <nz-form-control>
+            <nz-input-group>
+                <input class="input" type="email" nz-input [(ngModel)]="email" placeholder="Email Address" [disabled]="true" />
+            </nz-input-group>
+        </nz-form-control>
+    </nz-form-item>
+
+    <div class="form-footer">
+        <button nz-button nzType="primary" class="submit-btn" [nzLoading]="isLoading" (click)="updateProfile()">
+            Update
+        </button>
+    </div>
+</div>

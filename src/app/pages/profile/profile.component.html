@@ -23,7 +23,7 @@
     <section class="main-section">
         <div class="subtitle">Personal Details</div>
         <div class="mini-section-divider"></div>
-        <article>
+        <article *ngIf="!showForm">
             <p>
                 <span class="text-muted">Firstname: </span>
                 {{ userProfile?.firstname }}
@@ -37,6 +37,16 @@
                 <span style="font-weight: bold;">{{ userProfile?.email }}</span>
             </p>
             <p style="margin-top: 32px;"><a class="href-link" (click)="updatePD()">Update Details</a></p>
+        </article>
+
+        <article *ngIf="showForm">
+            <p>
+                <a class="href-link" (click)="updatePD()">
+                    <fa-icon style="padding-right: 8px;" [icon]="['fas', 'long-arrow-alt-left']"></fa-icon>
+                    Go Back
+                </a>
+            </p>
+            <app-update-profile-form (updateCompleted)="closeProfileForm($event)"></app-update-profile-form>
         </article>
     </section>
 </main>
