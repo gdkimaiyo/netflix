@@ -34,6 +34,9 @@
   font-size: 38px;
   @include respond-to(handhelds) {
     font-size: 22px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+    text-align: left;
   }
 }
 ::ng-deep .ant-collapse {
