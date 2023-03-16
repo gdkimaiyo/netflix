@@ -99,7 +99,7 @@ export class LoginFormComponent implements OnInit {
           );
           if (err?.status === 400) {
             const action = {
-              userId: err?.response?.data?.data?._id,
+              userId: err?.error?.data?._id,
               action: 'Attempted to sign in to your account: Email or password do not match.',
             };
             this.userService.saveUserLogs(action).subscribe((result) => {}); 
