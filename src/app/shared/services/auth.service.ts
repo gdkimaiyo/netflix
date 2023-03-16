@@ -26,6 +26,10 @@ export class AuthService {
     return this.http.post(`${environment.backendApi}/api/v1/auth/verify`, payload, httpOptions);
   }
 
+  updateProfile(payload: any, userId: string): Observable<any> {
+    return this.http.put(`${environment.backendApi}/api/v1/auth/update/${userId}`, payload, httpOptions);
+  }
+
   logout(): void {
     localStorage.removeItem("nflix_user");
   }

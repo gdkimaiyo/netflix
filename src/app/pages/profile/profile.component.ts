@@ -18,6 +18,8 @@ export class ProfileComponent implements OnInit {
   isHandset: boolean = false;
   avatarSize: number = 128;
 
+  showForm: boolean = false;
+
   colorCodes = NOTIFICATION_CODES;
 
   constructor(
@@ -42,18 +44,21 @@ export class ProfileComponent implements OnInit {
   }
 
   updatePD(): void {
-    this.sendNotification(
-      'info',
-      '',
-      'Feature is in development. It will be available soon. ',
-      this.colorCodes.info
-    );
+    this.showForm = !this.showForm;
+  }
+
+  closeProfileForm(status: boolean): void {
+    this.showForm = !status;
+    this.ngOnInit();
   }
 
   formattedDate(mydate: Date) {
-    const format = "MMM d, y";
-    const locale = "en-US";
-    return formatDate(mydate, format, locale);
+    if (mydate) {
+      const format = "MMM d, y";
+      const locale = "en-US";
+      return formatDate(mydate, format, locale);
+    }
+    return "January 1, 2023"; // Fallback date
   }
 
   sendNotification(type: string, title: string, message: string, bgcolor: string): void {

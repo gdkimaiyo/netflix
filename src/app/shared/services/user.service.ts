@@ -14,6 +14,10 @@ export class UserService {
     return this.http.get(`${environment.backendApi}/api/v1/users`);
   }
 
+  getUserById(userId: string): Observable<any> {
+    return this.http.get(`${environment.backendApi}/api/v1/users/${userId}`);
+  }
+
   saveUserLogs(payload: any): Observable<any> {
     return this.http.post(`${environment.backendApi}/api/v1/userlogs`, payload);
   }
