@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  backendApi: 'https://gdkimaiyo.github.io/netflix',
+  backendApi: 'https://mininetflix-service.herokuapp.com',
 };
