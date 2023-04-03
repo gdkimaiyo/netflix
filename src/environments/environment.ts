@@ -5,6 +5,8 @@
 export const environment = {
   production: false,
   backendApi: 'http://localhost:4000',
+  TMDB_API_KEY:'0518ef053229e44210fcc9955fdb7d2b',
+  OMDB_API:'850e8d93'
 };
 
 /*
